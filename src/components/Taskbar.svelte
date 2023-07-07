@@ -6,7 +6,7 @@
 		plusButtonClicked = true
 		setTimeout(() => {
 			plusButtonClicked = false
-		}, 1000)
+		}, 200)
 	}
 </script>
 
@@ -74,17 +74,19 @@
 
     @keyframes popClick {
         0% {
-            width: 60px;
-            height: 60px;
+            transform: scale(1);
         }
 
-        30%, 90% {
+        30%, 50% {
             transform: scale(0.9);
         }
 
+        50%, 70% {
+            transform: scale(1.1)
+        }
+
         100% {
-            width: 60px;
-            height: 60px;
+            transform: scale(1);
         }
     }
 
