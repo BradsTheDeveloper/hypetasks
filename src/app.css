@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
 
+:root {
+    --widgetBG: inherit;
+    --BG: inherit;
+}
+
 * {
     font-family: 'Inter', sans-serif;
 }

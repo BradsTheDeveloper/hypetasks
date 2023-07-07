@@ -14,19 +14,19 @@
     <div id="mainTaskbar">
         <a id="home" href="/">
             <i class="fa-solid fa-house"></i>
-            Home
+            <p>Home</p>
         </a>
         <a id="events" href="/events">
             <i class="fa-solid fa-calendar-day"></i>
-            Events
+            <p>Events</p>
         </a>
         <a id="focus" href="/focus">
             <i class="fa-solid fa-expand"></i>
-            Focus
+            <p>Focus</p>
         </a>
         <a id="archive" href="/archive">
             <i class="fa-solid fa-folder"></i>
-            Archive
+            <p>Archive</p>
         </a>
     </div>
     <button id="plusButton" on:click={plusButtonClick} class={plusButtonClicked ? 'clicked' : ''}>
@@ -35,7 +35,18 @@
 </div>
 
 <style>
-    #taskbar,  #mainTaskbar, #plusButton{
+
+    @media (max-width: 768px) {
+        #mainTaskbar {
+            width: 45%;
+        }
+
+        #mainTaskbar a p {
+            display: none;
+        }
+    }
+  
+    #taskbar,  #mainTaskbar, #plusButton {
         display: flex;
     }
 
@@ -44,6 +55,7 @@
         justify-content: center;
         position: fixed;
         bottom: 20px;
+        overflow: hidden;
     }
 
     #mainTaskbar, #plusButton {
@@ -56,7 +68,6 @@
 
     #mainTaskbar {
         background-color: #ffffff;
-        width: 50%;
         max-width: 500px;
         border-style: solid;
         border-width: 1px;
