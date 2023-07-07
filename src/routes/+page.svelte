@@ -2,29 +2,30 @@
 
 	import Taskbar  from "../components/Taskbar.svelte";
 	import { quotes } from '/src/stores.js'; 
-	let greetingWidgetBG;
-	let greetingWidgetText;
+	let dashHeaderBG;
+	let dashHeaderText;
 
 	let timeOfDay;
 	const d = new Date();
 	let hour = d.getHours();
 	if (hour < 5) {
 		timeOfDay = "night";
-		greetingWidgetBG = '#070808';
+		dashHeaderBG = '#070808';
+		dashHeaderText = '#ffffff';
 	} else if (hour < 12) {
 		timeOfDay = "morning";
-		greetingWidgetBG = '#edeecb';
+		dashHeaderBG = '#edeecb';
 	} else if (hour < 17) {
 		timeOfDay = "afternoon";
-		greetingWidgetBG = '#edeecb';
+		dashHeaderBG = '#edeecb';
 	} else if (hour < 21) {
 		timeOfDay = "evening";
-		greetingWidgetBG = '#2c4349';
-		greetingWidgetText = '#ffffff';
+		dashHeaderBG = '#2c4349';
+		dashHeaderText = '#ffffff';
 	} else if (hour <= 23) {
 		timeOfDay = "night";
-		greetingWidgetBG = '#070808';
-		greetingWidgetText = '#ffffff';
+		dashHeaderBG = '#070808';
+		dashHeaderText = '#ffffff';
 	}
 	const randomQuoteID = Math.floor(Math.random() * quotes.length)
 	const randomQuote = quotes[randomQuoteID][0];
@@ -34,50 +35,35 @@
 
 <Taskbar />
 
-<div id="widgetGallery">
-	<div id="greetingWidget" class="widget" style="--greetingWidgetBG: {greetingWidgetBG}; --greetingWidgetText: {greetingWidgetText}; ">
-		<div id="greeting">
-			<h2>Good {timeOfDay}, Bradley</h2>
-			<p>Let's get some work done!</p>
-		</div>
-		<div id="greetingWidgetQuote">
-			<div id="greetingWidgetQuoteContent">
-				<p>{randomQuote}</p>
-			</div>
-			<p id="greetingWidgetQuoteAuthor">{randomQuoteAuthor}</p>
-		</div>
-	</div>
+<div id="dashHeader" style="--dashHeaderBG: {dashHeaderBG}; --dashHeaderText: {dashHeaderText}; ">
+    <div id="greeting">
+        <h2>Good {timeOfDay}, Bradley</h2>
+        <p>Let's get some work done!</p>
+    </div>
+    <div id="dashHeaderQuote">
+        <div id="dashHeaderQuoteContent">
+            <p>{randomQuote}</p>
+        </div>
+        <p id="dashHeaderQuoteAuthor">{randomQuoteAuthor}</p>
+    </div>
 </div>
 
 <style>
 
-	@media (max-width: 768px) {
-		.widget {
-			width: 100%;
-		}
-	}
+	@media (max-width: 768px) {}
 
-	.widget {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
+	* {
 		box-sizing: border-box;
-		width: calc(100%/3);
-		height: 250px;
-		border-radius: 10px;
-		padding: 10px 15px;
 	}
 
-	@media (max-width: 768px) {
-		.widget {
-			width: 100%;
-		}
-	}
-
-	#greetingWidget {
-		position: relative;
-		background-color: var(--greetingWidgetBG);
-		color: var(--greetingWidgetText);
+	#dashHeader {
+        box-sizing: border-box;
+		background-color: var(--dashHeaderBG);
+		color: var(--dashHeaderText);
+        margin: 0;
+		padding: 0;
+        width: 100vw;
+        height: 100vh;
 	}
 
 	#greeting h2, p {
@@ -85,13 +71,12 @@
 		margin-top: 10px;
 	}
 
-	#greetingWidgetQuote {
+	#dashHeaderQuote {
 		bottom: 0px;
 		width: 100%;
 	}
 
-	#greetingWidgetQuoteContent {
-		display: block;
+	#dashHeaderQuoteContent {
 		box-sizing: border-box;
 		width: 100%;
 		height: max-content;
@@ -101,7 +86,7 @@
 		padding: 2px 10px;
 	}
 
-	#greetingWidgetQuoteAuthor {
+	#dashHeaderQuoteAuthor {
 		margin-top: 10px;
 	}
 
