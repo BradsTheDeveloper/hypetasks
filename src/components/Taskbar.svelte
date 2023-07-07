@@ -1,16 +1,20 @@
 <div class="taskbar" id="taskbar">
     <div id="mainTaskbar">
         <a id="home" href="/">
-            <span class="material-symbols-rounded">dashboard</span>
+            <i class="fa-solid fa-house"></i>
             Home
         </a>
         <a id="events" href="/events">
-            <span class="material-symbols-rounded">event</span>
+            <i class="fa-solid fa-calendar-day"></i>
             Events
         </a>
         <a id="focus" href="/focus">
-            <span class="material-symbols-rounded">dark_mode</span>
+            <i class="fa-solid fa-expand"></i>
             Focus
+        </a>
+        <a id="archive" href="/archive">
+            <i class="fa-solid fa-folder"></i>
+            Archive
         </a>
     </div>
     <button id="plusButton">
@@ -42,7 +46,9 @@
         background-color: #ffffff;
         width: 50%;
         max-width: 500px;
-        box-shadow: 0px 0px 10px;
+        border-style: solid;
+        border-width: 1px;
+        padding: 0 3%;
     }
 
     #mainTaskbar a {
@@ -82,11 +88,15 @@
         color: #ffffff;
         width: 60px;
         outline: none;
-        box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+        box-shadow: 10px 8px 15px rgba(0, 0, 0, 0.1);
+        border-style: solid;
+        border-width: 1px;
+        border-color: black;
     }
 
-    #plusButton:active {
-        animation: popClick 0.5s ease 0s alternate forwards;
+    #plusButton:active:after {
+        /*animation: popClick 0.5s ease 0s alternate forwards;*/
+        background-color: white;
     }
 
 
