@@ -1,3 +1,15 @@
+<script>
+	let plusButtonClicked = false
+
+	function plusButtonClick() {
+		if (plusButtonClicked) return // prevent toggle when already toggled
+		plusButtonClicked = true
+		setTimeout(() => {
+			plusButtonClicked = false
+		}, 1000)
+	}
+</script>
+
 <div class="taskbar" id="taskbar">
     <div id="mainTaskbar">
         <a id="home" href="/">
@@ -17,7 +29,7 @@
             Archive
         </a>
     </div>
-    <button id="plusButton">
+    <button id="plusButton" on:click={plusButtonClick} class={plusButtonClicked ? 'clicked' : ''}>
         <span class="material-symbols-rounded">add</span>
     </button>
 </div>
@@ -67,8 +79,7 @@
         }
 
         30%, 90% {
-            width: calc(0.5*60px);
-            height: calc(0.5*60px);
+            transform: scale(0.9);
         }
 
         100% {
@@ -76,8 +87,6 @@
             height: 60px;
         }
     }
-
-    
 
     #plusButton {
         cursor: pointer;
@@ -94,9 +103,8 @@
         border-color: black;
     }
 
-    #plusButton:active:after {
-        /*animation: popClick 0.5s ease 0s alternate forwards;*/
-        background-color: white;
+    #plusButton.clicked {
+        animation: popClick 0.2s ease 0s alternate forwards;
     }
 
 

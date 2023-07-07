@@ -13,4 +13,9 @@
 </div>
 
 <style>
+	#widgetGallery div {
+		background-color: aqua;
+		width: 100px;
+		height: 100px;
+	}
 </style>
