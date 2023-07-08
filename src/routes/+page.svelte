@@ -63,12 +63,11 @@
         margin: 0;
 		padding: 0;
         width: 100vw;
-        height: 100vh;
+        height: 10%;
 	}
 
 	#greeting h2, p {
 		margin: 0;
-		margin-top: 10px;
 	}
 
 	#dashHeaderQuote {

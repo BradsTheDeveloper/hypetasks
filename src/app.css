@@ -12,3 +12,8 @@
 h1 {
     font-weight: bolder;
 }
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
