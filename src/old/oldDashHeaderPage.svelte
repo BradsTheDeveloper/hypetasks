@@ -92,9 +92,6 @@
         height: max-content;
 	}
 
-	#mainGreeting {
-		
-	}
 
 	#greetingQuoteContent {
 		box-sizing: border-box;
