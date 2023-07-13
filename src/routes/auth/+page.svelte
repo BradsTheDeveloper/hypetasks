@@ -1,9 +1,15 @@
 <script>
+    let signUpClicked = false;
+    function signUpClick() {
+		if (signUpClicked) return // prevent toggle when already toggled
+		signUpClicked = true
+        console.log("yes")
+	}
 
 </script>
 
 <div class="dialogBG">
-    <dialog open>
+    <dialog open id="authWindow">
         <div id="welcome">
             <svg id="welcomeLogo" width="100" height="100" viewBox="0 0 1050 1050" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g filter="url(#filter0_d_32_93)">
@@ -57,6 +63,10 @@
                 
             <h1>Welcome to hypetasks</h1>
         </div>
+        <div id="authChoice" class={signUpClicked ? 'signUpClicked' : ''}>
+            <button id="signUpChoiceButton" class="authChoiceButton" on:click={signUpClick}>Sign Up</button>
+            <button id="logInChoiceButton" class="authChoiceButton">Log In</button>
+        </div>
     </dialog>
 </div>
 
@@ -66,6 +76,14 @@
         background-color: white;
         color: black;
         border: none;
+    }
+
+    #authWindow {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        overflow: hidden;
     }
 
     #welcome {
@@ -78,12 +96,77 @@
         margin-right: 10px;
     }
 
+
+    #authChoice {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        height: 7rem;
+        width: 100%;
+    }
+
+    .authChoiceButton {
+        width: 100%;
+        height: 3rem;
+        cursor: pointer;
+        border-radius: 100px;
+        /*border-style: solid;
+        border-width: 1px;
+        border-color: black;*/
+        border: none;
+        color: white;
+        outline: none;
+        font-size: large;
+    }
+
+    #signUpChoiceButton {
+        background: rgb(231,38,54);
+        background: linear-gradient(45deg, rgba(231,38,54,1) 0%, rgba(243,166,0,1) 100%); 
+    }
+
+    #logInChoiceButton {
+        background: black;
+    }
+
+    @keyframes signUpTransition {
+        0% {
+            transform: opacity(1);
+        }
+
+        100% {
+            transform: opacity(0);
+        }
+    }
+
+    #authChoice.signUpClicked {
+        background-color: white;
+        /*animation: signUpTransition 0.2s ease 0s alternate forwards;*/
+    }
+
+    /* Large screens */
     @media only screen and (min-width: 600px) {
         dialog {
-            width: 50vw;
-            height: 50vh;
+            width: 20%;
+            min-width: 300px;
+            height: fit-content;
             border-radius: 10px;
             box-shadow: 0px 0px 8px #888888;
+        }
+
+        #authWindow {
+            height: 60%;
+        }
+
+        .dialogBG {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.2);
         }
 
     }
@@ -93,6 +176,13 @@
         dialog {
             width: 100vw;
             height: 100vh;
+            margin: 0;
+        }
+
+        .dialogBG {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
         }
     }
 </style>
