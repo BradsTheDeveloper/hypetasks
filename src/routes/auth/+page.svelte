@@ -139,7 +139,7 @@
     }
 
     #authChoice.signUpClicked {
-        background-color: white;
+        background-color: black;
         /*animation: signUpTransition 0.2s ease 0s alternate forwards;*/
     }
 
