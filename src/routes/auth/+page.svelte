@@ -1,8 +1,13 @@
 <script>
     let signUpClicked = false;
+    let logInClicked = false;
     function signUpClick() {
 		if (signUpClicked) return // prevent toggle when already toggled
 		signUpClicked = true
+	}
+    function logInClick() {
+		if (logInClicked) return // prevent toggle when already toggled
+		logInClicked = true
         console.log("yes")
 	}
 
@@ -63,9 +68,9 @@
                 
             <h1>Welcome to hypetasks</h1>
         </div>
-        <div id="authChoice" class={signUpClicked ? 'signUpClicked' : ''}>
+        <div id="authChoice" class={signUpClicked ? 'signUpClicked' : (logInClicked ? 'logInClicked' : '')}>
             <button id="signUpChoiceButton" class="authChoiceButton" on:click={signUpClick}>Sign Up</button>
-            <button id="logInChoiceButton" class="authChoiceButton">Log In</button>
+            <button id="logInChoiceButton" class="authChoiceButton" on:click={logInClick}>Log In</button>
         </div>
     </dialog>
 </div>
@@ -103,6 +108,7 @@
         flex-direction: column;
         height: 7rem;
         width: 100%;
+        /*transition: transform 1s ease, display 1s ease 2s;*/
     }
 
     .authChoiceButton {
@@ -128,19 +134,33 @@
         background: black;
     }
 
-    @keyframes signUpTransition {
+    @keyframes authChoiceTransition {
         0% {
-            transform: opacity(1);
+            transform: translateX(0);
+            display: flex;
+        }
+
+        90% {
+            transform: translateX(200%);
+            filter: opacity(0);
         }
 
         100% {
-            transform: opacity(0);
+            filter: opacity(0);
+            position: absolute; 
+            visibility: hidden;
         }
+
     }
 
     #authChoice.signUpClicked {
-        background-color: black;
-        /*animation: signUpTransition 0.2s ease 0s alternate forwards;*/
+        /*display: none;*/
+        animation: authChoiceTransition 1s ease 0s normal forwards;
+    }
+
+    #authChoice.logInClicked {
+        /*display: none;*/
+        animation: authChoiceTransition 1s ease 0s normal forwards;
     }
 
     /* Large screens */
