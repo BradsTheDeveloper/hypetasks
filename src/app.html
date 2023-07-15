@@ -6,6 +6,14 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		%sveltekit.head%
 	</head>
+	<script>
+		if(navigator.userAgent.indexOf('iPhone') > -1 )
+		{
+			document
+			.querySelector("[name=viewport]")
+			.setAttribute("content","width=device-width, initial-scale=1, maximum-scale=1");
+		}
+	</script>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>

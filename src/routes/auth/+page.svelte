@@ -1,4 +1,8 @@
 <script>
+    import { createEventDispatcher } from 'svelte';
+
+    const dispatch = createEventDispatcher();
+
     let signUpClicked = false;
     let logInClicked = false;
     let email, password, authStatus, name;
@@ -13,6 +17,9 @@
 		logInClicked = true
         authStatus = "logIn"
 	}
+    function authenticate(){
+        
+    }
 
 </script>
 
@@ -72,8 +79,8 @@
             <h1>Welcome to hypetasks</h1>
         </div>
         <div id="authChoice" class={signUpClicked ? 'signUpClicked' : (logInClicked ? 'logInClicked' : '')}>
-            <button id="signUpChoiceButton" class="authChoiceButton" on:click={signUpClick}>Sign Up</button>
-            <button id="logInChoiceButton" class="authChoiceButton" on:click={logInClick}>Log In</button>
+            <button class="signUpChoiceButton authChoiceButton" on:click={signUpClick}>Sign Up</button>
+            <button class="logInChoiceButton authChoiceButton" on:click={logInClick}>Log In</button>
         </div>
         <form id="signUpForm" class={signUpClicked ? 'authForm signUpClicked' : 'authForm'}>
             <h1>Sign Up</h1>
@@ -84,6 +91,7 @@
             <input type="email" class="authInput" name="signUpEmail" id="signUpEmail" placeholder="example@example.com">
             <label class="authInputLabel" for="signUpPassword">Password</label>
             <input type="password" class="authInput" name="signUpPassword" id="signUpPassword">
+            <button class="signUpChoiceButton authChoiceButton" on:click={}>Sign Up</button>
         </form>
         <form id="logInForm" class={logInClicked ? 'authForm logInClicked' : 'authForm'}>
             <h1>Log In</h1>
@@ -107,7 +115,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: space-between;
+        justify-content: space-evenly;
         overflow: hidden;
     }
 
@@ -145,12 +153,12 @@
         font-size: large;
     }
 
-    #signUpChoiceButton {
+    .signUpChoiceButton {
         background: rgb(231,38,54);
         background: linear-gradient(45deg, rgba(231,38,54,1) 0%, rgba(243,166,0,1) 100%); 
     }
 
-    #logInChoiceButton {
+    .logInChoiceButton {
         background: black;
     }
 
