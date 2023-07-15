@@ -1,14 +1,17 @@
 <script>
     let signUpClicked = false;
     let logInClicked = false;
+    let email, password, authStatus, name;
+
     function signUpClick() {
 		if (signUpClicked) return // prevent toggle when already toggled
 		signUpClicked = true
+        authStatus = "signUp"
 	}
     function logInClick() {
 		if (logInClicked) return // prevent toggle when already toggled
 		logInClicked = true
-        console.log("yes")
+        authStatus = "logIn"
 	}
 
 </script>
@@ -72,6 +75,23 @@
             <button id="signUpChoiceButton" class="authChoiceButton" on:click={signUpClick}>Sign Up</button>
             <button id="logInChoiceButton" class="authChoiceButton" on:click={logInClick}>Log In</button>
         </div>
+        <form id="signUpForm" class={signUpClicked ? 'authForm signUpClicked' : 'authForm'}>
+            <h1>Sign Up</h1>
+            <label class="authInputLabel" for="signUpName">Name</label>
+            <p id="signUpNameText">What you'll be referred as in the app.</p>
+            <input type="email" class="authInput" name="signUpName" id="signUpEmail">
+            <label class="authInputLabel" for="signUpEmail">Email</label>
+            <input type="email" class="authInput" name="signUpEmail" id="signUpEmail" placeholder="example@example.com">
+            <label class="authInputLabel" for="signUpPassword">Password</label>
+            <input type="password" class="authInput" name="signUpPassword" id="signUpPassword">
+        </form>
+        <form id="logInForm" class={logInClicked ? 'authForm logInClicked' : 'authForm'}>
+            <h1>Log In</h1>
+            <label class="authInputLabel" for="logInEmail">Email</label>
+            <input type="email" class="authInput" name="logInEmail" id="logInEmail">
+            <label class="authInputLabel" for="logInPassword">Password</label>
+            <input type="password" class="authInput" name="logInPassword" id="logInPassword">
+        </form>
     </dialog>
 </div>
 
@@ -163,6 +183,63 @@
         animation: authChoiceTransition 1s ease 0s normal forwards;
     }
 
+    @keyframes authFormTransition {
+
+        0% {
+            filter: opacity(0);
+            position: initial; 
+            transform: translateX(200%);
+            
+        }
+
+
+        100% {
+            transform: translateX(0);
+            filter: opacity(1);
+            visibility: visible;
+            position: initial;
+        }
+
+    }
+
+    #signUpForm.signUpClicked {
+        animation: authFormTransition 1s ease 1s normal forwards;
+    }
+
+    #logInForm.logInClicked {
+        animation: authFormTransition 1s ease 1s normal forwards;
+    }
+
+    .authForm {
+        width: 100%;
+        position: absolute;
+        visibility: hidden;
+        transform: translateX(200%);
+    }
+
+    .authForm .authInput {
+        height: 2rem;
+        box-sizing: border-box;
+        border-radius: 100px;
+        outline: none;
+        border: 1px solid black;
+        width: 100%;
+        padding: 0 15px;
+        margin: 10px 0;
+    }
+
+    .authInputLabel {
+        width: 100%;
+        text-align: center;
+    }
+
+    #signUpNameText {
+        filter: opacity(0.5);
+        font-size: 0.7rem;
+        margin-bottom: 0;
+        margin-top: 0;
+    }
+
     /* Large screens */
     @media only screen and (min-width: 600px) {
         dialog {
@@ -194,14 +271,18 @@
     /* Small screens */
     @media only screen and (max-width: 600px) {
         dialog {
-            width: 100vw;
-            height: 100vh;
+            min-width: 100vw;
+            min-width: -webkit-fill-available;
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
             margin: 0;
         }
 
         .dialogBG {
-            width: 100vw;
-            height: 100vh;
+            min-width: 100vw;
+            min-width: -webkit-fill-available;
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
             margin: 0;
         }
     }
