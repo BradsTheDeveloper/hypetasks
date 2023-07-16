@@ -1,6 +1,7 @@
 import { redirect } from '@sveltejs/kit';
+import { page } from '$app/stores';
 
-let authenticate = true;
+let authenticate = false;
 
 export function load() {
     if (authenticate) {

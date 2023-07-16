@@ -3,7 +3,11 @@
     import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
     import { onMount } from "svelte";
     import { auth } from "../../initialiseFirebase.js"
-    import { goto } from '$app/navigation';
+    import { goto, afterNavigate } from '$app/navigation';
+    import { base } from '$app/paths';
+    import { redirect } from '@sveltejs/kit';
+    import { browser } from '$app/environment';
+    // ...Your other imports
 
     const dispatch = createEventDispatcher();
 
@@ -11,42 +15,59 @@
     let logInClicked = false;
     let email, password, authStatus, name;
 
+    let previousPage = String(base) ;
+
+    afterNavigate(({from}) => {
+        previousPage = from?.url.pathname || previousPage
+        console.log(previousPage)
+    }) 
+
     function signUpClick() {
 		if (signUpClicked) return // prevent toggle when already toggled
 		signUpClicked = true
-        authStatus = "signUp"
 	}
     function logInClick() {
 		if (logInClicked) return // prevent toggle when already toggled
 		logInClicked = true
-        authStatus = "logIn"
 	}
-    async function authenticate(){
-        console.log("Authenticated")
+    async function logInAuth(){
+        console.log("Authenticating...")
         try {
-            if (authStatus = "signUp") {
-                let user = await createUserWithEmailAndPassword(auth, email, password)
-                updateProfile(auth.currentUser, {
-                displayName: name, 
-                }).then(() => {
-                // Profile updated!
-                // ...
-                console.log("All done!")
-                }).catch((error) => {
-                // An error occurred
-                    console.log("Sign In Error", error.message)
-                });
-            } else if (authStatus = "logIn") {
-                let user = await signInWithEmailAndPassword(auth, email, password)
-            }
-            //await setDoc(userDoc(auth.currentUser.uid), { username: user.user.displayName, email: user.user.email })
+            console.log("Logging in...")
+            let user = await signInWithEmailAndPassword(auth, email, password)
+            console.log(auth.currentUser.email)
+        } catch (error) {
+            console.log("Sign In Error", error.message)
+            error = error.message
+        }
+        if (browser) {
+            window.location.href = '/';
+        }
+    }
+        
+    async function signUpAuth(){
+        try {
+            console.log("Signing up...")
+            let user = await createUserWithEmailAndPassword(auth, email, password)
             await goto("/")
         } catch (error) {
             console.log("Sign In Error", error.message)
-          error = error.message
+            error = error.message
         }
-
+        updateProfile(auth.currentUser, {
+            displayName: name, 
+        }).then(() => {
+            // Profile updated!
+            console.log("All done!")
+        }).catch((error) => {
+        // An error occurred
+            console.log("Name Update Error", error.message)
+        });
+        if (browser) {
+            window.location.href = '/';
+        }
     }
+    
 
 </script>
 
@@ -103,30 +124,30 @@
                 </svg>
                 
                 
-            <h1>Welcome to hypetasks</h1>
+            <h1>Welcome to hypetasks {base}</h1>
         </div>
         <div id="authChoice" class={signUpClicked ? 'signUpClicked' : (logInClicked ? 'logInClicked' : '')}>
             <button class="signUpChoiceButton authChoiceButton" on:click={signUpClick}>Sign Up</button>
             <button class="logInChoiceButton authChoiceButton" on:click={logInClick}>Log In</button>
         </div>
-        <form id="signUpForm" class={signUpClicked ? 'authForm signUpClicked' : 'authForm'} on:submit|preventDefault={authenticate}>
+        <form id="signUpForm" class={signUpClicked ? 'authForm signUpClicked' : 'authForm'} on:submit|preventDefault={signUpAuth}>
             <h1>Sign Up</h1>
             <label class="authInputLabel" for="signUpName">Name</label>
             <p id="signUpNameText">What you'll be referred as in the app.</p>
-            <input type="text" class="authInput" name="signUpName" id="signUpEmail" bind:value={name}>
+            <input type="text" class="authInput" name="signUpName" id="signUpEmail" bind:value={name} required>
             <label class="authInputLabel" for="signUpEmail">Email</label>
-            <input type="email" class="authInput" name="signUpEmail" id="signUpEmail" placeholder="example@example.com" bind:value={email}>
+            <input type="email" class="authInput" name="signUpEmail" id="signUpEmail" placeholder="example@example.com" bind:value={email} required>
             <label class="authInputLabel" for="signUpPassword">Password</label>
-            <input type="password" class="authInput" name="signUpPassword" id="signUpPassword" bind:value={password}>
-            <button class="signUpChoiceButton authChoiceButton">Sign Up</button>
+            <input type="password" class="authInput" name="signUpPassword" id="signUpPassword" bind:value={password} required>
+            <button class="signUpChoiceButton authChoiceButton" type="submit">Sign Up</button>
         </form>
-        <form id="logInForm" class={logInClicked ? 'authForm logInClicked' : 'authForm'}>
+        <form id="logInForm" class={logInClicked ? 'authForm logInClicked' : 'authForm'} on:submit|preventDefault={logInAuth}>
             <h1>Log In</h1>
             <label class="authInputLabel" for="logInEmail" >Email</label>
             <input type="email" class="authInput" name="logInEmail" id="logInEmail" bind:value={email}>
             <label class="authInputLabel" for="logInPassword">Password</label>
             <input type="password" class="authInput" name="logInPassword" id="logInPassword" bind:value={password}>
-            <button class="signUpChoiceButton authChoiceButton" on:click={authenticate}>Log In</button>
+            <button class="signUpChoiceButton authChoiceButton" type="submit">Log In</button>
         </form>
     </dialog>
 </div>
