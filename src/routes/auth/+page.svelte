@@ -1,13 +1,10 @@
 <script>
     import { createEventDispatcher } from 'svelte';
-    import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-    import { onMount } from "svelte";
+    import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, browserLocalPersistence, setPersistence, onAuthStateChanged } from "firebase/auth";
     import { auth } from "../../initialiseFirebase.js"
-    import { goto, afterNavigate } from '$app/navigation';
+    import { goto } from '$app/navigation';
     import { base } from '$app/paths';
-    import { redirect } from '@sveltejs/kit';
     import { browser } from '$app/environment';
-    // ...Your other imports
 
     const dispatch = createEventDispatcher();
 
@@ -16,11 +13,6 @@
     let email, password, authStatus, name;
 
     let previousPage = String(base) ;
-
-    afterNavigate(({from}) => {
-        previousPage = from?.url.pathname || previousPage
-        console.log(previousPage)
-    }) 
 
     function signUpClick() {
 		if (signUpClicked) return // prevent toggle when already toggled
@@ -34,22 +26,40 @@
         console.log("Authenticating...")
         try {
             console.log("Logging in...")
-            let user = await signInWithEmailAndPassword(auth, email, password)
+            setPersistence(auth, browserLocalPersistence)
+            .then(() => {
+                return signInWithEmailAndPassword(auth, email, password);
+            })
+            .catch((error) => {
+                // Handle Errors here.
+                console.log("Sign In or Persistance Error", error.message)
+            });
             console.log(auth.currentUser.email)
         } catch (error) {
             console.log("Sign In Error", error.message)
             error = error.message
         }
-        if (browser) {
-            window.location.href = '/';
-        }
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                if (browser) {
+                    window.location.href = '/';
+                }
+            }
+        });
     }
         
     async function signUpAuth(){
         try {
             console.log("Signing up...")
-            let user = await createUserWithEmailAndPassword(auth, email, password)
-            await goto("/")
+            setPersistence(auth, browserLocalPersistence)
+            .then(() => {
+                return createUserWithEmailAndPassword(auth, email, password);
+            })
+            .catch((error) => {
+                // Handle Errors here.
+                console.log("Sign In or Persistance Error", error.message)
+            });
+            console.log(auth.currentUser.email)
         } catch (error) {
             console.log("Sign In Error", error.message)
             error = error.message
@@ -63,9 +73,13 @@
         // An error occurred
             console.log("Name Update Error", error.message)
         });
-        if (browser) {
-            window.location.href = '/';
-        }
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                if (browser) {
+                    window.location.href = '/';
+                }
+            }
+        });
     }
     
 

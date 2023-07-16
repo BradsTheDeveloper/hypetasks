@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import { auth } from "../initialiseFirebase"
+import { auth } from "../../initialiseFirebase"
 import { onAuthStateChanged } from "firebase/auth";
 
 let authenticated;
@@ -13,7 +13,7 @@ onAuthStateChanged(auth, (user) => {
 });
 
 export function load() {
-    if (authenticated = false) {
-        throw redirect(307, '/auth');
+    if (authenticated = true) {
+        throw redirect(307, '/');
     }
 }
