@@ -1,5 +1,9 @@
 <script>
     import { createEventDispatcher } from 'svelte';
+    import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+    import { onMount } from "svelte";
+    import { auth } from "../../initialiseFirebase.js"
+    import { goto } from '$app/navigation';
 
     const dispatch = createEventDispatcher();
 
@@ -17,8 +21,31 @@
 		logInClicked = true
         authStatus = "logIn"
 	}
-    function authenticate(){
-        
+    async function authenticate(){
+        console.log("Authenticated")
+        try {
+            if (authStatus = "signUp") {
+                let user = await createUserWithEmailAndPassword(auth, email, password)
+                updateProfile(auth.currentUser, {
+                displayName: name, 
+                }).then(() => {
+                // Profile updated!
+                // ...
+                console.log("All done!")
+                }).catch((error) => {
+                // An error occurred
+                    console.log("Sign In Error", error.message)
+                });
+            } else if (authStatus = "logIn") {
+                let user = await signInWithEmailAndPassword(auth, email, password)
+            }
+            //await setDoc(userDoc(auth.currentUser.uid), { username: user.user.displayName, email: user.user.email })
+            await goto("/")
+        } catch (error) {
+            console.log("Sign In Error", error.message)
+          error = error.message
+        }
+
     }
 
 </script>
@@ -82,23 +109,24 @@
             <button class="signUpChoiceButton authChoiceButton" on:click={signUpClick}>Sign Up</button>
             <button class="logInChoiceButton authChoiceButton" on:click={logInClick}>Log In</button>
         </div>
-        <form id="signUpForm" class={signUpClicked ? 'authForm signUpClicked' : 'authForm'}>
+        <form id="signUpForm" class={signUpClicked ? 'authForm signUpClicked' : 'authForm'} on:submit|preventDefault={authenticate}>
             <h1>Sign Up</h1>
             <label class="authInputLabel" for="signUpName">Name</label>
             <p id="signUpNameText">What you'll be referred as in the app.</p>
-            <input type="email" class="authInput" name="signUpName" id="signUpEmail">
+            <input type="text" class="authInput" name="signUpName" id="signUpEmail" bind:value={name}>
             <label class="authInputLabel" for="signUpEmail">Email</label>
-            <input type="email" class="authInput" name="signUpEmail" id="signUpEmail" placeholder="example@example.com">
+            <input type="email" class="authInput" name="signUpEmail" id="signUpEmail" placeholder="example@example.com" bind:value={email}>
             <label class="authInputLabel" for="signUpPassword">Password</label>
-            <input type="password" class="authInput" name="signUpPassword" id="signUpPassword">
-            <button class="signUpChoiceButton authChoiceButton" on:click={}>Sign Up</button>
+            <input type="password" class="authInput" name="signUpPassword" id="signUpPassword" bind:value={password}>
+            <button class="signUpChoiceButton authChoiceButton">Sign Up</button>
         </form>
         <form id="logInForm" class={logInClicked ? 'authForm logInClicked' : 'authForm'}>
             <h1>Log In</h1>
-            <label class="authInputLabel" for="logInEmail">Email</label>
-            <input type="email" class="authInput" name="logInEmail" id="logInEmail">
+            <label class="authInputLabel" for="logInEmail" >Email</label>
+            <input type="email" class="authInput" name="logInEmail" id="logInEmail" bind:value={email}>
             <label class="authInputLabel" for="logInPassword">Password</label>
-            <input type="password" class="authInput" name="logInPassword" id="logInPassword">
+            <input type="password" class="authInput" name="logInPassword" id="logInPassword" bind:value={password}>
+            <button class="signUpChoiceButton authChoiceButton" on:click={authenticate}>Log In</button>
         </form>
     </dialog>
 </div>
