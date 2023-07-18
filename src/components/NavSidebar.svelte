@@ -12,19 +12,22 @@
 
 <nav id="sidebar">
     <a id="home" href="/" class="sidebarButton">
-        <i class="fa-solid fa-house"></i>
+        <i class="fa-solid fa-house fa-lg"></i>
     </a>
     <a id="events" href="/events" class="sidebarButton">
-        <i class="fa-solid fa-calendar-day"></i>
+        <i class="fa-solid fa-calendar-day fa-lg"></i>
     </a>
     <a id="focus" href="/focus" class="sidebarButton">
-        <i class="fa-solid fa-expand"></i>
+        <i class="fa-solid fa-expand fa-lg"></i>
     </a>
     <a id="archive" href="/archive" class="sidebarButton">
-        <i class="fa-solid fa-folder"></i>
+        <i class="fa-solid fa-folder fa-lg"></i>
+    </a>
+    <a id="settings" href="/settings" class="sidebarButton">
+        <i class="fa-solid fa-gear fa-lg"></i>
     </a>
     <button id="plus" class="plusButton sidebarButton">
-        <i class="fa-solid fa-plus"></i>
+        <i class="fa-solid fa-plus fa-xl"></i>
     </button>
 </nav>
 
@@ -37,12 +40,16 @@
     #sidebar {
         position: fixed;
         background-color: white;
-        box-shadow: 0px 0px 8px #888888;
-        overflow: scroll;
+        box-shadow: 0px 0px 3px #888888;
+        overflow: hidden;
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin: 0;
+        justify-content: center;
+        margin: 1rem;
+        border-radius: 10px;
+        box-sizing: border-box;
+        z-index: 99;
     }
 
     .sidebarButton {
@@ -78,7 +85,7 @@
         #sidebar {
             top: 0;
             width: 4rem;
-            height: 100vh;
+            height: calc(100vh - 2rem);
         }
     }
 
@@ -86,9 +93,18 @@
     @media only screen and (max-width: 600px) {
         #sidebar {
             bottom: 0;
-            width: 100vw;
+            width: calc(100vw - 6rem);
             height: 3rem;
             box-shadow: 0px 0px 8px #888888;
+            margin: 1rem 3rem;
+        }
+
+        .sidebarButton {
+            width: 4rem;
+        }
+        
+        .plusButton {
+            margin-top: 0;
         }
 
         #sidebar {

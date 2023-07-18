@@ -3,7 +3,9 @@
 </svelte:head>
 
 <script>
-    import Sidebar from "../components/Sidebar.svelte";
+    import NavSidebar from "../components/NavSidebar.svelte";
+    import TabHeader from "../components/TabHeader.svelte";
+    import OrganisationBar from "../components/OrganisationBar.svelte";
     import { page } from '$app/stores';
     import { auth } from "../initialiseFirebase.js"
     import { onAuthStateChanged } from "firebase/auth"
@@ -17,14 +19,31 @@
     });
 </script>
 
-<Sidebar />
+<NavSidebar />
+<OrganisationBar />
 
 <main>
+    <TabHeader name="Home" icon="fa-solid fa-house fa-2xl"/>
     <p>{userName}</p>
 </main>
 
 <style>
-    main {
-        margin-left: 5rem;
+    :global(body) {
+        /*display: flex;*/
     }
+
+    /* Large screens */
+    @media only screen and (min-width: 600px) {
+        main {
+            margin-left: 19rem;
+        }
+    }
+
+    /* Small screens */
+    @media only screen and (max-width: 600px) {
+        main {
+            margin: 1rem;
+        }
+    }
+
 </style>

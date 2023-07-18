@@ -4,16 +4,9 @@ import { onAuthStateChanged } from "firebase/auth";
 
 let authenticated;
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    authenticated = true;
-  } else {
-    authenticated = false;
-  }
-});
-
 export function load() {
-    if (authenticated = false) {
-        throw redirect(307, '/auth');
-    }
+  console.log(auth.currentUser)
+  if (auth.currentUser) {} else {
+    throw redirect(307, '/auth');
+  }
 }
