@@ -11,12 +11,15 @@
     import { onAuthStateChanged } from "firebase/auth"
     import { goto } from '$app/navigation';
     import { browser } from '$app/environment';
+	import LoadingScreen  from "../components/LoadingScreen.svelte";
 
     let userName;
+    let openLS = true;
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
             userName = user.displayName;
+            openLS = false;
         }
         else {
             if (browser) {
@@ -24,9 +27,11 @@
             }
         }
     });
+
 </script>
 
 
+<LoadingScreen openLoadingScreen={openLS} />
 <NavSidebar />
 <OrganisationBar />
 
@@ -41,17 +46,9 @@
     }
 
     /* Large screens */
-    @media only screen and (min-width: 600px) {
-        main {
-            margin-left: 19rem;
-        }
-    }
+    @media only screen and (min-width: 600px) {}
 
     /* Small screens */
-    @media only screen and (max-width: 600px) {
-        main {
-            margin: 1rem;
-        }
-    }
+    @media only screen and (max-width: 600px) {}
 
 </style>

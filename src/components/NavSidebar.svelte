@@ -49,7 +49,7 @@
         margin: 1rem;
         border-radius: 10px;
         box-sizing: border-box;
-        z-index: 99;
+        z-index: 90;
     }
 
     .sidebarButton {
