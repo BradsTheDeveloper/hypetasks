@@ -12,7 +12,13 @@
     let logInClicked = false;
     let email, password, authStatus, name;
 
-    let previousPage = String(base) ;
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            if (browser) {
+                window.location.href = '/';
+            }
+        }
+    });
 
     function signUpClick() {
 		if (signUpClicked) return // prevent toggle when already toggled

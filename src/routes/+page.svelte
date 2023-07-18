@@ -9,6 +9,8 @@
     import { page } from '$app/stores';
     import { auth } from "../initialiseFirebase.js"
     import { onAuthStateChanged } from "firebase/auth"
+    import { goto } from '$app/navigation';
+    import { browser } from '$app/environment';
 
     let userName;
 
@@ -16,8 +18,14 @@
         if (user) {
             userName = user.displayName;
         }
+        else {
+            if (browser) {
+                window.location.href = '/auth';
+            }
+        }
     });
 </script>
+
 
 <NavSidebar />
 <OrganisationBar />
