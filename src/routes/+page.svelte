@@ -12,9 +12,11 @@
     import { goto } from '$app/navigation';
     import { browser } from '$app/environment';
 	import LoadingScreen  from "../components/LoadingScreen.svelte";
+	import PlusButton from "../components/PlusButton.svelte";
 
     let userName;
     let loading = true;
+    let currentView = ["Current", "fa-solid fa-mountain-sun fa-2xl"];
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
@@ -30,18 +32,17 @@
 
 </script>
 
+<PlusButton />
 <NavSidebar />
 <OrganisationBar />
 
 <main class={loading ? "loading" : ""}>
-    <TabHeader name="Home" icon="fa-solid fa-house fa-2xl"/>
+    <TabHeader name={currentView[0]} icon={currentView[1]}/>
     <p>{userName}</p>
 </main>
 
 <style>
-    :global(body) {
-        /*display: flex;*/
-    }
+    :global(body) {/*display: flex;*/}
 
     /* Large screens */
     @media only screen and (min-width: 600px) {}

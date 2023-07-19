@@ -5,11 +5,16 @@
     --textColor: black;
     --accentColor: orange;
     --loadingGradient: linear-gradient(90deg, #eee, #e3e3e3, #eee);
+    --dropShadowColor: #888888;
 }
 
 .dark-theme {
-    --background: black;
+    --background: #1e1e1e;
+    --textColor: #f3f4fc;
+    --accentColor: #979bce;
     --loadingGradient: linear-gradient(to right, #656871 0%, #888b94 20%, #656871 40%, #656871 100%);
+    --dropShadow: 0px 0px 3px #000000;
+    --dropShadowColor: #000000;
 }
 
 * {
@@ -24,6 +29,25 @@ html, body {
     margin: 0;
     padding: 0;
     font-size: 16px;
+    background-color: var(--background) !important;
+    color: var(--textColor) !important;
+}
+
+body {
+    opacity: 0;
+}
+
+@keyframes showFromHidden {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+body.showFromHidden {
+    animation: showFromHidden 0.175s ease forwards;
 }
 
 .loading {
@@ -73,13 +97,13 @@ textarea {
 }
 
 main {
-    height: calc(100vh - 2rem);
+    height: 100vh;
 }
 
 /* Large screens */
 @media only screen and (min-width: 600px) {
     main {
-        margin: 1rem;
+        margin: 0;
         margin-left: 19rem;
     }
 }

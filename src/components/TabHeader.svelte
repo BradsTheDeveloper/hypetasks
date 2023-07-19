@@ -10,11 +10,12 @@
 
 <style>
     header {
-        margin-top: 1rem;
+        padding-top: 1rem;
         display: flex;
         flex-direction: row;
         height: 3rem;
         align-items: center;
+        color: var(--textColor);
     }
 
     header i {

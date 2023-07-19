@@ -21,7 +21,7 @@
 <style>
     #organisationBar {
         position: fixed;
-        background-color: white;
+        background-color: var(--background);
         box-shadow: 0px 0px 3px #888888;
         overflow: hidden;
         overflow-y: scroll;
@@ -41,7 +41,7 @@
         height: 2.5rem;
         cursor: pointer;
         border: none;
-        color: gray;
+        color: var(--textColor);
         background-color: transparent;
         margin: 0;
         border-radius: 5px;
@@ -53,10 +53,11 @@
 
     .sectionSelect i {
         margin-right: 0.3rem;
+        color: var(--accentColor);
     }
 
     hr {
-        color: gray;
+        color: var(--textColor);
         width: 100%;
         border-radius: 100px;
     }

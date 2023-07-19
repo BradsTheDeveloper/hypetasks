@@ -175,8 +175,6 @@
 <style>
 
     dialog {
-        background-color: white;
-        color: black;
         border: none;
     }
 
@@ -197,7 +195,6 @@
     #welcomeLogo {
         margin-right: 10px;
     }
-
 
     #authChoice {
         display: flex;
@@ -326,7 +323,9 @@
             min-width: 300px;
             height: fit-content;
             border-radius: 10px;
-            box-shadow: 0px 0px 8px #888888;
+            box-shadow: 0px 0px 8px var(--dropShadowColor);
+            background-color: white;
+            color: black;
         }
 
         #authWindow {
@@ -342,7 +341,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-color: rgba(0, 0, 0, 0.2);
+            background-color: var(--background);
         }
 
     }
@@ -355,6 +354,8 @@
             min-height: 100vh;
             min-height: -webkit-fill-available;
             margin: 0;
+            background-color: var(--background);
+            color: var(--textColor);
         }
 
         .dialogBG {

@@ -14,6 +14,8 @@
     </div>
 {/if}
 
+<!--<div id="whiteScreen"></div>-->
+
 <style>
     #loadingScreen {
         position: fixed;

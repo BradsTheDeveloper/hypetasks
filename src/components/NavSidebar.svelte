@@ -39,7 +39,7 @@
 
     #sidebar {
         position: fixed;
-        background-color: white;
+        background-color: var(--background);
         box-shadow: 0px 0px 3px #888888;
         overflow: hidden;
         display: flex;
@@ -57,9 +57,9 @@
         align-items: center;
         justify-content: center;
         height: 5rem;
-        color: gray;
+        color: var(--accentColor);
         text-decoration: none;
-        filter: grayscale(100%) opacity(0.7);;
+        filter: opacity(0.7);;
         width: 100%;
     }
 
@@ -70,7 +70,7 @@
         border: none;
         justify-content: center;
         align-items: center;
-        color: gray;
+        color: var(--accentColor);
         width: 60px;
         outline: none;
         background-color: transparent;
