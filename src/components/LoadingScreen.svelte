@@ -1,5 +1,5 @@
 <script>
-    import { Circle3 } from 'svelte-loading-spinners';
+    import { Circle3, Firework } from 'svelte-loading-spinners';
     import { randomTip } from '../stores';
 	import { page, navigating } from '$app/stores';
 
@@ -9,13 +9,13 @@
 
 {#if openLoadingScreen == true}
     <div id="loadingScreen">
-        <Circle3 size="60" color="#FF3E00" unit="px" duration="2s" />
+        <Firework size="60" color="#FF3E00" unit="px" duration="2s" />
         <!--<p id="tip">Tip: {randomTip}</p>-->
     </div>
 {/if}
 
 <style>
-    #loadingScreen, #whiteLoadingScreen {
+    #loadingScreen {
         position: fixed;
         top: 0;
         display: flex;
