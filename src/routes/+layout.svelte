@@ -4,7 +4,10 @@
 
 <script>
     import '../app.css'
+	import LoadingScreen from '../components/LoadingScreen.svelte';
 </script>
+
+<LoadingScreen />
 
 <slot />
   

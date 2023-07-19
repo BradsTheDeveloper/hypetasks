@@ -3,14 +3,14 @@
     import { randomTip } from '../stores';
 	import { page, navigating } from '$app/stores';
 
-    export let openLoadingScreen = false;
+    //export let openLoadingScreen = false;
 
 </script>
 
-{#if openLoadingScreen == true}
+{#if $navigating}
     <div id="loadingScreen">
         <Firework size="60" color="#FF3E00" unit="px" duration="2s" />
-        <!--<p id="tip">Tip: {randomTip}</p>-->
+        <p id="tip">Tip: {randomTip}</p>
     </div>
 {/if}
 

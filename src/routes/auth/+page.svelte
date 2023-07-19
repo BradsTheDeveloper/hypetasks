@@ -184,7 +184,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: space-evenly;
         overflow: hidden;
     }
 
@@ -192,6 +191,7 @@
         display: flex;
         align-items: center;
         justify-content: flex-start;
+        justify-self: flex-start;
     }
 
     #welcomeLogo {
@@ -203,6 +203,8 @@
         display: flex;
         justify-content: space-between;
         flex-direction: column;
+        align-self: flex-end;
+        justify-self: flex-end;
         height: 7rem;
         width: 100%;
         /*transition: transform 1s ease, display 1s ease 2s;*/

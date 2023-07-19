@@ -14,12 +14,12 @@
 	import LoadingScreen  from "../components/LoadingScreen.svelte";
 
     let userName;
-    let openLS = true;
+    let loading = true;
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
             userName = user.displayName;
-            openLS = false;
+            loading = false;
         }
         else {
             if (browser) {
@@ -30,12 +30,10 @@
 
 </script>
 
-
-<LoadingScreen openLoadingScreen={openLS} />
 <NavSidebar />
 <OrganisationBar />
 
-<main>
+<main class={loading ? "loading" : ""}>
     <TabHeader name="Home" icon="fa-solid fa-house fa-2xl"/>
     <p>{userName}</p>
 </main>
