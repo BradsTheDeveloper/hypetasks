@@ -9,7 +9,7 @@
 }
 
 .dark-theme {
-    --background: #1e1e1e;
+    --background: #121212;
     --textColor: #f3f4fc;
     --accentColor: #979bce;
     --loadingGradient: linear-gradient(to right, #656871 0%, #888b94 20%, #656871 40%, #656871 100%);

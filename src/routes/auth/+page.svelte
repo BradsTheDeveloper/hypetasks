@@ -1,7 +1,8 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, browserLocalPersistence, setPersistence, onAuthStateChanged } from "firebase/auth";
-    import { auth } from "../../initialiseFirebase.js"
+    import { auth, db } from "../../initialiseFirebase.js"
+    import { addDoc, collection, doc } from "firebase/firestore";
     import { goto } from '$app/navigation';
     import { base } from '$app/paths';
     import { browser } from '$app/environment';
@@ -79,6 +80,13 @@
         // An error occurred
             console.log("Name Update Error", error.message)
         });
+        try {
+            await setDoc(doc(db, "users", auth.currentUser.uid), {
+                plusActive: false,
+            });
+        } catch (e) {
+            console.error("Error adding document: ", e);
+        }
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 if (browser) {

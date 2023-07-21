@@ -7,7 +7,8 @@
     import TabHeader from "../components/TabHeader.svelte";
     import OrganisationBar from "../components/OrganisationBar.svelte";
     import { page } from '$app/stores';
-    import { auth } from "../initialiseFirebase.js"
+    import { auth, db } from "../initialiseFirebase.js";
+    import { addDoc, collection, doc, setDoc } from "firebase/firestore";
     import { onAuthStateChanged } from "firebase/auth"
     import { goto } from '$app/navigation';
     import { browser } from '$app/environment';
@@ -30,6 +31,16 @@
         }
     });
 
+    async function fbTest() {
+        try {
+            await setDoc(doc(db, "users", auth.currentUser.uid), {
+                plusActive: false,
+            });
+        } catch (e) {
+            console.error("Error adding document: ", e);
+        }
+    }
+
 </script>
 
 <PlusButton />
@@ -39,6 +50,7 @@
 <main class={loading ? "loading" : ""}>
     <TabHeader name={currentView[0]} icon={currentView[1]}/>
     <p>{userName}</p>
+    <button on:click={fbTest}>Test</button>
 </main>
 
 <style>
