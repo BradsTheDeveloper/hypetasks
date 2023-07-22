@@ -13,7 +13,7 @@
     import { goto } from '$app/navigation';
     import { browser } from '$app/environment';
 	import LoadingScreen  from "../components/LoadingScreen.svelte";
-	import PlusButton from "../components/PlusButton.svelte";
+	import MagicButton from "../components/MagicButton.svelte";
 
     let userName;
     let loading = true;
@@ -43,7 +43,7 @@
 
 </script>
 
-<PlusButton />
+<MagicButton />
 <NavSidebar />
 <OrganisationBar />
 
