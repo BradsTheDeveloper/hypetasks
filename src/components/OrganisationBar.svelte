@@ -3,7 +3,7 @@
         ["Current", "fa-solid fa-mountain-sun"],
         ["Tommorow", "fa-solid fa-angles-right"],
         ["This Week", "fa-solid fa-calendar-check"],
-        ["All", "fa-solid fa-rectangle-list"],
+        ["All", "fa-solid fa-rectangle-list"]
     ]
 </script>
 
@@ -16,6 +16,10 @@
         </button>
     {/each}
     <hr>
+    <button class="sectionSelect">
+        <i class="fa-solid fa-inbox"></i>
+        <p>Inbox</p>
+    </button>
 </div>
 
 <style>

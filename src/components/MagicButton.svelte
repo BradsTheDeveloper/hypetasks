@@ -10,6 +10,10 @@
 	}
 
     let magicPromptPlaceholder = "Add a task..."
+    let dateOptionText = "Date"
+    let timeOptionText = "Time"
+    let reminderOptionText = "Reminder On"
+    let areaOptionText = "Inbox"
 
     const d = new Date();
     const weekdays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
@@ -36,24 +40,34 @@
 <div id="magicPrompt">
     <div id="magicPromptSelector"></div>
     <input type="text" name="magicPromptInput" id="magicPromptInput" placeholder={magicPromptPlaceholder}>
-    <div id="dateSelectors">
-        <p>Date</p>
-        {#each datePresets as datePreset (datePreset.name)}
-            <button class="dateSelector">{datePreset.name}</button>
-        {/each}
-        <button class="dateSelector customDateSelector">Another Date   <i class="fa-solid fa-angle-up"></i></button>
+    <div id="magicOptions">
+        <button class="magicOption" id="dateOption"><i class="fa-regular fa-calendar"></i>{dateOptionText}<i class="fa-solid fa-angle-right"></i></button>
+        <button class="magicOption" id="timeOption"><i class="fa-regular fa-clock"></i>{timeOptionText}<i class="fa-solid fa-angle-right"></i></button>
+        <button class="magicOption" id="reminderOption"><i class="fa-solid fa-bell"></i>{reminderOptionText}<i class="fa-solid fa-angle-right"></i></button>
+        <button class="magicOption" id="areaOption"><i class="fa-solid fa-inbox"></i>{areaOptionText}<i class="fa-solid fa-angle-right"></i></button>
     </div>
-    <div id="timeSelectors">
-        {#each timePresets as timePreset (timePreset.name)}
-            <button class="dateSelector">{timePreset.name}</button>
+    <div id="dateSelect" class="datetimeSelect">
+        {#each datePresets as datePreset (datePreset.name)}
+            <button class="dateSelectOption">{datePreset.name}</button>
         {/each}
-        <button class="dateSelector customDateSelector">Another Time   <i class="fa-solid fa-angle-up"></i></button>
+        <button class="dateSelectOption customDateSelect">Another Date   <i class="fa-solid fa-angle-up"></i></button>
+    </div>
+    <div id="timeSelect" class="datetimeSelect">
+        {#each timePresets as timePreset (timePreset.name)}
+            <button class="dateSelectOption">{timePreset.name}</button>
+        {/each}
+        <button class="dateSelectOption customDateSelect">Another Time   <i class="fa-solid fa-angle-up"></i></button>
+        <input type="time" name="customTimeSelect" id="customTimeSelect">
     </div>
 </div>
 
 <style>
 
     @media (max-width: 768px) {}
+
+    button {
+        cursor: pointer;
+    }
     
     #magicButton {
         display: flex;
@@ -62,7 +76,6 @@
         justify-content: space-around;
         align-items: center;
         border-radius: 50px;
-        cursor: pointer;
         border: none;
         background-color: var(--accentColor);
         justify-content: center;
@@ -99,23 +112,36 @@
         width: 100%;
     }
 
-    #dateSelectors {
+    .magicOption {
+        background-color: transparent;
+        border: none;
+        outline: none;
+        padding: 0.25rem 0;
+        font-size: 16px;
+        display: flex;
+        flex-direction: row;
+        gap: 0.25rem;
+        align-items: center;
+    }
+
+    #magicOptions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .datetimeSelect {
         display: flex;
         justify-content: flex-start;
         width: 100%;
         gap: 0.25rem;
     }
 
-    .dateSelector {
-        border-radius: 100px;
+    .dateSelectOption, #customTimeSelect {
         border: none;
         outline: none;
         padding: 0.25rem 0.5rem;
-        margin: 0.25rem 0;
-    }
-
-    .customDateSelector {
-        margin-left: auto;
+        margin: 0;
+        border-radius: 100px;
     }
 
     p {
@@ -138,6 +164,22 @@
         100% {
             transform: scale(1);
         }
+    }
+
+    /* Large screens */
+    @media only screen and (min-width: 600px) {
+
+    }
+
+    /* Small screens */
+    @media only screen and (max-width: 600px) {
+        #magicPrompt {
+            width: calc(100vw - 4rem);
+            height: 10rem;
+            background-color: gray;
+            border-radius: 10px;
+            padding: 1rem;
+        } 
     }
 
 
