@@ -1,5 +1,5 @@
 <script>
-	let magicButtonClicked = true
+	let magicButtonClicked = false
 
 	function magicButtonClick() {
 		if (magicButtonClicked) return // prevent toggle when already toggled
@@ -14,6 +14,11 @@
     let timeOptionText = "Time"
     let reminderOptionText = "Reminder On"
     let areaOptionText = "Inbox"
+
+    let dateSelectShown = false;
+    let timeSelectShown = false;
+    let reminderSelectShown = false;
+    let areaSelectShown = false;
 
     const d = new Date();
     const weekdays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
@@ -32,6 +37,14 @@
         {name: "In the evening", value: "sometime"},
         {name: "No Time", value: null},
     ]
+
+    function hideAllSelects() {
+        //let toggles = [dateSelectShown, timeSelectShown, reminderSelectShown, areaSelectShown]
+        if (dateSelectShown) dateSelectShown = !dateSelectShown;
+        if (timeSelectShown) timeSelectShown = !timeSelectShown;
+        if (reminderSelectShown) reminderSelectShown = !reminderSelectShown;
+        if (areaSelectShown) areaSelectShown = !areaSelectShown;
+    }
 </script>
 
 <button id="magicButton" on:click={magicButtonClick} class={magicButtonClicked ? 'clicked' : ''}>
@@ -41,22 +54,38 @@
     <div id="magicPromptSelector"></div>
     <input type="text" name="magicPromptInput" id="magicPromptInput" placeholder={magicPromptPlaceholder}>
     <div id="magicOptions">
-        <button class="magicOption" id="dateOption"><i class="fa-regular fa-calendar"></i>{dateOptionText}<i class="fa-solid fa-angle-right"></i></button>
-        <button class="magicOption" id="timeOption"><i class="fa-regular fa-clock"></i>{timeOptionText}<i class="fa-solid fa-angle-right"></i></button>
-        <button class="magicOption" id="reminderOption"><i class="fa-solid fa-bell"></i>{reminderOptionText}<i class="fa-solid fa-angle-right"></i></button>
-        <button class="magicOption" id="areaOption"><i class="fa-solid fa-inbox"></i>{areaOptionText}<i class="fa-solid fa-angle-right"></i></button>
+        <button id="dateOption" on:click="{() => {hideAllSelects(); dateSelectShown = !dateSelectShown}}" class="magicOption">
+            <i class="fa-regular fa-calendar"></i>
+            <p>{dateOptionText}</p>
+            <i class="fa-solid fa-angle-right"></i>
+        </button>
+        <button id="timeOption" on:click="{() => {hideAllSelects(); timeSelectShown = !timeSelectShown}}" class="magicOption">
+            <i class="fa-regular fa-clock"></i>
+            <p>{timeOptionText}</p>
+            <i class="fa-solid fa-angle-right"></i>
+        </button>
+        <button class="magicOption" id="reminderOption">
+            <i class="fa-solid fa-bell"></i>
+            <p>{reminderOptionText}</p>
+            <i class="fa-solid fa-angle-right"></i>
+        </button>
+        <button class="magicOption" id="areaOption">
+            <i class="fa-solid fa-inbox"></i>
+            <p>{areaOptionText}</p>
+            <i class="fa-solid fa-angle-right"></i>
+        </button>
     </div>
-    <div id="dateSelect" class="datetimeSelect">
+    <div id="dateSelect" class={dateSelectShown ? 'datetimeSelect' : (hideAllSelects ? 'datetimeSelect inactive' : "")} >
         {#each datePresets as datePreset (datePreset.name)}
-            <button class="dateSelectOption">{datePreset.name}</button>
+            <button class="datetimeSelectOption">{datePreset.name}</button>
         {/each}
-        <button class="dateSelectOption customDateSelect">Another Date   <i class="fa-solid fa-angle-up"></i></button>
+        <button class="datetimeSelectOption customDateSelect">Another Date   <i class="fa-solid fa-angle-up"></i></button>
     </div>
-    <div id="timeSelect" class="datetimeSelect">
+    <div id="timeSelect" class={timeSelectShown ? 'datetimeSelect' : (hideAllSelects ? 'datetimeSelect inactive' : "")} >
         {#each timePresets as timePreset (timePreset.name)}
-            <button class="dateSelectOption">{timePreset.name}</button>
+            <button class="datetimeSelectOption">{timePreset.name}</button>
         {/each}
-        <button class="dateSelectOption customDateSelect">Another Time   <i class="fa-solid fa-angle-up"></i></button>
+        <button class="datetimeSelectOption customDateSelect">Another Time   <i class="fa-solid fa-angle-up"></i></button>
         <input type="time" name="customTimeSelect" id="customTimeSelect">
     </div>
 </div>
@@ -89,12 +118,12 @@
         /*background-color: #3b5fe2;*/
     }
 
-    /*#magicButton.clicked {
+    #magicButton.clicked {
         animation: popClick 0.2s ease 0s alternate forwards;
-    }*/
+    }
 
     #magicPrompt {
-        position: absolute;
+        position: fixed;
         bottom: 5.75rem;
         right: 1rem;
         width: 40rem;
@@ -110,6 +139,7 @@
         outline: none;
         font-size: xx-large;
         width: 100%;
+        padding: 0;
     }
 
     .magicOption {
@@ -134,18 +164,26 @@
         justify-content: flex-start;
         width: 100%;
         gap: 0.25rem;
+        transition: all 0.5s ease 0.5s;
     }
 
-    .dateSelectOption, #customTimeSelect {
+    .datetimeSelectOption, #customTimeSelect {
         border: none;
         outline: none;
         padding: 0.25rem 0.5rem;
         margin: 0;
         border-radius: 100px;
     }
-
-    p {
+    
+    #customTimeSelect {
         font-size: 13.3333px;
+    }
+
+    .inactive {
+        position: absolute;
+        visibility: hidden;
+        opacity: 0;
+        transition: all 0.5s ease;
     }
 
     @keyframes popClick {
@@ -180,6 +218,10 @@
             border-radius: 10px;
             padding: 1rem;
         } 
+
+        .magicOption p {
+            display: none;
+        }
     }
 
 

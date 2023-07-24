@@ -30,7 +30,7 @@ html, body {
     padding: 0;
     font-size: 16px;
     background-color: var(--background) !important;
-    color: var(--textColor) !important;
+    color: var(--textColor) !important; 
 }
 
 body {
@@ -111,6 +111,6 @@ main {
 /* Small screens */
 @media only screen and (max-width: 600px) {
     main {
-        margin: 1rem;
+        padding: 0;
     }
 }
