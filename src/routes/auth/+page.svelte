@@ -190,6 +190,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
         overflow: hidden;
     }
 
@@ -197,7 +198,7 @@
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        justify-self: flex-start;
+        margin-bottom: auto;
     }
 
     #welcomeLogo {
@@ -208,10 +209,9 @@
         display: flex;
         justify-content: space-between;
         flex-direction: column;
-        align-self: flex-end;
-        justify-self: flex-end;
         height: 7rem;
         width: 100%;
+        margin-bottom: auto;
         /*transition: transform 1s ease, display 1s ease 2s;*/
     }
 
@@ -232,6 +232,10 @@
     .signUpChoiceButton {
         background: rgb(231,38,54);
         background: linear-gradient(45deg, rgba(231,38,54,1) 0%, rgba(243,166,0,1) 100%); 
+    }
+
+    .authForm .signUpChoiceButton {
+        margin-top: 20px;
     }
 
     .logInChoiceButton {
@@ -299,6 +303,7 @@
         position: absolute;
         visibility: hidden;
         transform: translateX(200%);
+        margin-bottom: auto;
     }
 
     .authForm .authInput {
