@@ -38,12 +38,14 @@
         {name: "No Time", value: null},
     ]
 
-    function hideAllSelects() {
+    function hideAllSelects(toggle) {
         //let toggles = [dateSelectShown, timeSelectShown, reminderSelectShown, areaSelectShown]
-        if (dateSelectShown) dateSelectShown = !dateSelectShown;
-        if (timeSelectShown) timeSelectShown = !timeSelectShown;
-        if (reminderSelectShown) reminderSelectShown = !reminderSelectShown;
-        if (areaSelectShown) areaSelectShown = !areaSelectShown;
+        if (toggle == false) {
+            if (dateSelectShown) dateSelectShown = !dateSelectShown;
+            if (timeSelectShown) timeSelectShown = !timeSelectShown;
+            if (reminderSelectShown) reminderSelectShown = !reminderSelectShown;
+            if (areaSelectShown) areaSelectShown = !areaSelectShown;
+        }
     }
 </script>
 
@@ -54,12 +56,12 @@
     <div id="magicPromptSelector"></div>
     <input type="text" name="magicPromptInput" id="magicPromptInput" placeholder={magicPromptPlaceholder}>
     <div id="magicOptions">
-        <button id="dateOption" on:click="{() => {hideAllSelects(); dateSelectShown = !dateSelectShown}}" class="magicOption">
+        <button id="dateOption" on:click="{() => {hideAllSelects(dateSelectShown); dateSelectShown = !dateSelectShown}}" class="magicOption">
             <i class="fa-regular fa-calendar"></i>
             <p>{dateOptionText}</p>
             <i class="fa-solid fa-angle-right"></i>
         </button>
-        <button id="timeOption" on:click="{() => {hideAllSelects(); timeSelectShown = !timeSelectShown}}" class="magicOption">
+        <button id="timeOption" on:click="{() => {hideAllSelects(timeSelectShown); timeSelectShown = !timeSelectShown}}" class="magicOption">
             <i class="fa-regular fa-clock"></i>
             <p>{timeOptionText}</p>
             <i class="fa-solid fa-angle-right"></i>
@@ -75,17 +77,16 @@
             <i class="fa-solid fa-angle-right"></i>
         </button>
     </div>
-    <div id="dateSelect" class={dateSelectShown ? 'datetimeSelect' : (hideAllSelects ? 'datetimeSelect inactive' : "")} >
+    <div id="dateSelect" class={dateSelectShown ? 'magicSelect' : (hideAllSelects ? 'magicSelect inactive' : "")} >
         {#each datePresets as datePreset (datePreset.name)}
-            <button class="datetimeSelectOption">{datePreset.name}</button>
+            <button class="magicSelectOption">{datePreset.name}</button>
         {/each}
-        <button class="datetimeSelectOption customDateSelect">Another Date   <i class="fa-solid fa-angle-up"></i></button>
+        <input type="date" name="customDateSelect" id="customDateSelect">
     </div>
-    <div id="timeSelect" class={timeSelectShown ? 'datetimeSelect' : (hideAllSelects ? 'datetimeSelect inactive' : "")} >
+    <div id="timeSelect" class={timeSelectShown ? 'magicSelect' : (hideAllSelects ? 'magicSelect inactive' : "")} >
         {#each timePresets as timePreset (timePreset.name)}
-            <button class="datetimeSelectOption">{timePreset.name}</button>
+            <button class="magicSelectOption">{timePreset.name}</button>
         {/each}
-        <button class="datetimeSelectOption customDateSelect">Another Time   <i class="fa-solid fa-angle-up"></i></button>
         <input type="time" name="customTimeSelect" id="customTimeSelect">
     </div>
 </div>
@@ -127,7 +128,7 @@
         bottom: 5.75rem;
         right: 1rem;
         width: 40rem;
-        height: 10rem;
+        height: fit-content;
         background-color: gray;
         border-radius: 10px;
         padding: 1rem;
@@ -146,7 +147,8 @@
         background-color: transparent;
         border: none;
         outline: none;
-        padding: 0.25rem 0;
+        padding: 0;
+        margin: 0.25rem 0;
         font-size: 16px;
         display: flex;
         flex-direction: row;
@@ -159,15 +161,22 @@
         gap: 0.5rem;
     }
 
-    .datetimeSelect {
+    .magicOption p {
+        margin: 0;
+    }
+
+    .magicSelect {
+        position: fixed;
+        bottom: 5rem;
+        margin-left: -5px;
         display: flex;
         justify-content: flex-start;
         width: 100%;
         gap: 0.25rem;
-        transition: all 0.5s ease 0.5s;
+        transition: all 0.5s ease;
     }
 
-    .datetimeSelectOption, #customTimeSelect {
+    .magicSelectOption, #customTimeSelect {
         border: none;
         outline: none;
         padding: 0.25rem 0.5rem;
@@ -180,10 +189,9 @@
     }
 
     .inactive {
-        position: absolute;
         visibility: hidden;
         opacity: 0;
-        transition: all 0.5s ease;
+        transition: all 0.25s ease;
     }
 
     @keyframes popClick {

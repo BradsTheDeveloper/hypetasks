@@ -162,7 +162,7 @@
             <h1>Sign Up</h1>
             <label class="authInputLabel" for="signUpName">Name</label>
             <p id="signUpNameText">What you'll be referred as in the app.</p>
-            <input type="text" class="authInput" name="signUpName" id="signUpEmail" bind:value={name} required>
+            <input type="text" class="authInput" name="signUpName" id="signUpName" bind:value={name} required>
             <label class="authInputLabel" for="signUpEmail">Email</label>
             <input type="email" class="authInput" name="signUpEmail" id="signUpEmail" placeholder="example@example.com" bind:value={email} required>
             <label class="authInputLabel" for="signUpPassword">Password</label>

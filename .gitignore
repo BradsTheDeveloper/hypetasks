@@ -11,3 +11,4 @@ vite.config.ts.timestamp-*
 /static
 /src/secrets.js
 /.vscode
+/.snapshot
