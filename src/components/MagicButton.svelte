@@ -63,22 +63,22 @@
         <button id="dateOption" on:click="{() => {hideAllSelects(dateSelectShown); dateSelectShown = !dateSelectShown}}" class="magicOption">
             <i class="fa-regular fa-calendar"></i>
             <p>{dateOptionText}</p>
-            <i class="fa-solid fa-angle-right"></i>
+            <i class={dateSelectShown ? 'fa-solid fa-angle-right rotate' : 'fa-solid fa-angle-right'}></i>
         </button>
         <button id="timeOption" on:click="{() => {hideAllSelects(timeSelectShown); timeSelectShown = !timeSelectShown}}" class="magicOption">
             <i class="fa-regular fa-clock"></i>
             <p>{timeOptionText}</p>
-            <i class="fa-solid fa-angle-right"></i>
+            <i class={timeSelectShown ? 'fa-solid fa-angle-right rotate' : 'fa-solid fa-angle-right'}></i>
         </button>
         <button class="magicOption" id="reminderOption">
             <i class="fa-solid fa-bell"></i>
             <p>{reminderOptionText}</p>
-            <i class="fa-solid fa-angle-right"></i>
+            <i class={reminderSelectShown ? 'fa-solid fa-angle-right rotate' : 'fa-solid fa-angle-right'}></i>
         </button>
         <button class="magicOption" id="areaOption">
             <i class="fa-solid fa-inbox"></i>
             <p>{areaOptionText}</p>
-            <i class="fa-solid fa-angle-right"></i>
+            <i class={areaSelectShown ? 'fa-solid fa-angle-right rotate' : 'fa-solid fa-angle-right'}></i>
         </button>
     </div>
     <div id="dateSelect" class={dateSelectShown ? 'magicSelect' : (hideAllSelects ? 'magicSelect inactive' : "")} >
@@ -168,6 +168,15 @@
 
     .magicOption p {
         margin: 0;
+    }
+
+    .magicOption i {
+        transition: all 0.25s ease;
+    }
+
+    .magicOption i.rotate {
+        rotate: 90deg;
+        transition: all 0.25s ease;
     }
 
     .magicSelect {
