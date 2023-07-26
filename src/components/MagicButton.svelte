@@ -7,6 +7,8 @@
 		setTimeout(() => {
 			magicButtonClicked = false
 		}, 200)
+        magicPromptShown = !magicPromptShown;
+        hideAllSelects(false)
 	}
 
     let magicPromptPlaceholder = "Add a task..."
@@ -15,6 +17,7 @@
     let reminderOptionText = "Reminder On"
     let areaOptionText = "Inbox"
 
+    let magicPromptShown = false;
     let dateSelectShown = false;
     let timeSelectShown = false;
     let reminderSelectShown = false;
@@ -47,12 +50,13 @@
             if (areaSelectShown) areaSelectShown = !areaSelectShown;
         }
     }
+
 </script>
 
 <button id="magicButton" on:click={magicButtonClick} class={magicButtonClicked ? 'clicked' : ''}>
     <span class="material-symbols-rounded">add</span>
 </button>
-<div id="magicPrompt">
+<div id="magicPrompt" class={magicPromptShown ? '' : 'inactive'}>
     <div id="magicPromptSelector"></div>
     <input type="text" name="magicPromptInput" id="magicPromptInput" placeholder={magicPromptPlaceholder}>
     <div id="magicOptions">
@@ -81,13 +85,13 @@
         {#each datePresets as datePreset (datePreset.name)}
             <button class="magicSelectOption">{datePreset.name}</button>
         {/each}
-        <input type="date" name="customDateSelect" id="customDateSelect">
+        <input type="date" name="customDateSelect" id="customDateSelect" class="customSelect">
     </div>
     <div id="timeSelect" class={timeSelectShown ? 'magicSelect' : (hideAllSelects ? 'magicSelect inactive' : "")} >
         {#each timePresets as timePreset (timePreset.name)}
             <button class="magicSelectOption">{timePreset.name}</button>
         {/each}
-        <input type="time" name="customTimeSelect" id="customTimeSelect">
+        <input type="time" name="customTimeSelect" id="customTimeSelect" class="customSelect">
     </div>
 </div>
 
@@ -132,6 +136,7 @@
         background-color: gray;
         border-radius: 10px;
         padding: 1rem;
+        transition: all 0.25s ease;
     }
 
     #magicPromptInput {
@@ -176,15 +181,16 @@
         transition: all 0.5s ease;
     }
 
-    .magicSelectOption, #customTimeSelect {
+    .magicSelectOption, .customSelect {
         border: none;
         outline: none;
         padding: 0.25rem 0.5rem;
         margin: 0;
         border-radius: 100px;
+        background-color: #f0f0f0;
     }
     
-    #customTimeSelect {
+    .customSelect {
         font-size: 13.3333px;
     }
 
