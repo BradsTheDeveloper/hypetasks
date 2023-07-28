@@ -20,6 +20,10 @@
         <i class="fa-solid fa-inbox"></i>
         <p>Inbox</p>
     </button>
+    <button class="sectionSelect">
+        <i class="fa-solid fa-plus"></i>
+        <p>Add Area</p>
+    </button>
 </div>
 
 <style>
@@ -56,6 +60,7 @@
     }
 
     .sectionSelect i {
+        margin: 0;
         margin-right: 0.3rem;
         color: var(--accentColor);
     }

@@ -10,6 +10,7 @@
     import { auth, db } from "../initialiseFirebase.js";
     import { addDoc, collection, doc, setDoc } from "firebase/firestore";
     import { onAuthStateChanged } from "firebase/auth"
+    import { Timestamp } from "firebase/firestore";
     import { goto } from '$app/navigation';
     import { browser } from '$app/environment';
 	import LoadingScreen  from "../components/LoadingScreen.svelte";

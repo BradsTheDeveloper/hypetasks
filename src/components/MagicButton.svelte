@@ -8,7 +8,7 @@
 			magicButtonClicked = false
 		}, 200)
         magicPromptShown = !magicPromptShown;
-        hideAllSelects(false)
+        setAllToFalseWithToggle(false, allSelectToggles)
 	}
 
     let magicPromptPlaceholder = "Add a task..."
@@ -22,23 +22,24 @@
     let timeSelectShown = false;
     let reminderSelectShown = false;
     let areaSelectShown = false;
+    let allSelectToggles  = [dateSelectShown, timeSelectShown, reminderSelectShown, areaSelectShown]
 
     const d = new Date();
     const weekdays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
     let weekday = weekdays[d.getDay()];
 
     let datePresets = [
-        {name: "Today", value: "today"},
-        {name: "Tommorow", value: "tommorow"},
-        {name: "Next "+weekday, value: "sometime"},
-        {name: "Sometime", value: "sometime"},
-        {name: "No Date", value: null},
+        {name: "Today", value: "today", active: false},
+        {name: "Tommorow", value: "tommorow", active: false},
+        {name: "Next "+weekday, value: "sometime", active: false},
+        {name: "Sometime", value: "sometime", active: false},
+        {name: "No Date", value: null, active: false},
     ]
     let timePresets = [
-        {name: "In the morning", value: "today"},
-        {name: "In the afternoon", value: "tommorow"},
-        {name: "In the evening", value: "sometime"},
-        {name: "No Time", value: null},
+        {name: "In the morning", value: "today", active: false},
+        {name: "In the afternoon", value: "tommorow", active: false},
+        {name: "In the evening", value: "sometime", active: false},
+        {name: "No Time", value: null, active: false},
     ]
 
     function hideAllSelects(toggle) {
@@ -51,6 +52,22 @@
         }
     }
 
+    function setAllToFalseWithToggle(toggle, list) {
+        if (toggle == false) {
+            list.forEach((item) => {
+                if (item) item = !item;
+            });
+        }
+    }
+
+    function setActiveToFalseWithToggle(toggle, list) {
+        if (toggle == false) {
+            list.forEach((item) => {
+                if (item.active) item.active = !item.active;
+            });
+        }
+    }
+
 </script>
 
 <button id="magicButton" on:click={magicButtonClick} class={magicButtonClicked ? 'clicked' : ''}>
@@ -60,12 +77,12 @@
     <div id="magicPromptSelector"></div>
     <input type="text" name="magicPromptInput" id="magicPromptInput" placeholder={magicPromptPlaceholder}>
     <div id="magicOptions">
-        <button id="dateOption" on:click="{() => {hideAllSelects(dateSelectShown); dateSelectShown = !dateSelectShown}}" class="magicOption">
+        <button id="dateOption" on:click={() => {setAllToFalseWithToggle(dateSelectShown, allSelectToggles); dateSelectShown = !dateSelectShown}} class="magicOption">
             <i class="fa-regular fa-calendar"></i>
             <p>{dateOptionText}</p>
             <i class={dateSelectShown ? 'fa-solid fa-angle-right rotate' : 'fa-solid fa-angle-right'}></i>
         </button>
-        <button id="timeOption" on:click="{() => {hideAllSelects(timeSelectShown); timeSelectShown = !timeSelectShown}}" class="magicOption">
+        <button id="timeOption" on:click="{() => {setAllToFalseWithToggle(timeSelectShown, allSelectToggles); timeSelectShown = !timeSelectShown}}" class="magicOption">
             <i class="fa-regular fa-clock"></i>
             <p>{timeOptionText}</p>
             <i class={timeSelectShown ? 'fa-solid fa-angle-right rotate' : 'fa-solid fa-angle-right'}></i>
@@ -80,16 +97,19 @@
             <p>{areaOptionText}</p>
             <i class={areaSelectShown ? 'fa-solid fa-angle-right rotate' : 'fa-solid fa-angle-right'}></i>
         </button>
+        <button class="magicOption" id="doneButton">
+            <p>Done</p>
+        </button>
     </div>
-    <div id="dateSelect" class={dateSelectShown ? 'magicSelect' : (hideAllSelects ? 'magicSelect inactive' : "")} >
+    <div id="dateSelect" class={dateSelectShown ? 'magicSelect' : 'magicSelect inactive'} >
         {#each datePresets as datePreset (datePreset.name)}
-            <button class="magicSelectOption">{datePreset.name}</button>
+            <button class={datePreset.active ? "magicSelectOption active" : "magicSelectOption"} on:click="{() => {setActiveToFalseWithToggle(datePreset.active, datePresets); datePreset.active = !datePreset.active}}">{datePreset.name}</button>
         {/each}
         <input type="date" name="customDateSelect" id="customDateSelect" class="customSelect">
     </div>
-    <div id="timeSelect" class={timeSelectShown ? 'magicSelect' : (hideAllSelects ? 'magicSelect inactive' : "")} >
+    <div id="timeSelect" class={timeSelectShown ? 'magicSelect' : 'magicSelect inactive'} >
         {#each timePresets as timePreset (timePreset.name)}
-            <button class="magicSelectOption">{timePreset.name}</button>
+            <button class={timePreset.active ? "magicSelectOption active" : "magicSelectOption"}>{timePreset.name}</button>
         {/each}
         <input type="time" name="customTimeSelect" id="customTimeSelect" class="customSelect">
     </div>
@@ -98,6 +118,8 @@
 <style>
 
     @media (max-width: 768px) {}
+
+    * {}
 
     button {
         cursor: pointer;
@@ -179,6 +201,13 @@
         transition: all 0.25s ease;
     }
 
+    #doneButton {
+        border-radius: 100px;
+        background-color: var(--accentColor);
+        padding: 2px 10px;
+        margin-left: auto;
+    }
+
     .magicSelect {
         position: fixed;
         bottom: 5rem;
@@ -197,6 +226,11 @@
         margin: 0;
         border-radius: 100px;
         background-color: #f0f0f0;
+    }
+
+    .magicSelectOption.active {
+        background-color: var(--accentColor);
+        color: white;
     }
     
     .customSelect {
@@ -241,6 +275,10 @@
             border-radius: 10px;
             padding: 1rem;
         } 
+
+        #magicButton {
+            bottom: 5rem;
+        }
 
         .magicOption p {
             display: none;
