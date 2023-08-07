@@ -1,4 +1,7 @@
 <script>
+    import { auth, db } from "../initialiseFirebase.js";
+    import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+    
 	let magicButtonClicked = false
 
 	function magicButtonClick() {
@@ -24,22 +27,25 @@
     let areaSelectShown = false;
     let allSelectToggles  = [dateSelectShown, timeSelectShown, reminderSelectShown, areaSelectShown]
 
-    const d = new Date();
-    const weekdays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-    let weekday = weekdays[d.getDay()];
+    const currentDate = new Date();
+    const daysOfWeeks = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    let currentDayOfWeek = daysOfWeeks[currentDate.getDay()];
 
-    let datePresets = [
-        {name: "Today", value: "today", active: false},
-        {name: "Tommorow", value: "tommorow", active: false},
-        {name: "Next "+weekday, value: "sometime", active: false},
-        {name: "Sometime", value: "sometime", active: false},
-        {name: "No Date", value: null, active: false},
+    let dateOptions = [
+        {id: 1, name: "Today", value: currentDate, active: false},
+        {id: 2, name: "Tommorow", value: (currentDate.getDate() + 1), active: false},
+        {id: 3, name: "Next "+currentDayOfWeek, value: (currentDate.getDate() + 7), active: false},
+        {id: 4, name: "Sometime", value: null, sometime: true, active: false},
+        {id: 5, name: "No Date", value: null, sometime: false, active: false},
     ]
-    let timePresets = [
+    let timeOptions = [
         {name: "In the morning", value: "today", active: false},
         {name: "In the afternoon", value: "tommorow", active: false},
         {name: "In the evening", value: "sometime", active: false},
         {name: "No Time", value: null, active: false},
+    ]
+    let reminderOptions = [
+        {name: "Every day until task", value: "today", active: false},
     ]
 
     function hideAllSelects(toggle) {
@@ -68,6 +74,43 @@
         }
     }
 
+    function magicSelectOptionClick(option, list, type) {
+        setActiveToFalseWithToggle(option.active, list);
+        option.active = !option.active;
+        console.log(option.active)
+        taskDate = option.value;
+        sometime = option.sometime;
+        if (type == "date") {
+            customTaskDate = null;
+        } else if (type == "time") {
+            customTaskTime = null;
+        }
+        dateOptions = dateOptions.slice();
+        timeOptions = timeOptions.slice();
+    }
+
+    let taskName, taskDate, customTaskDate, customTaskTime, sometime; 
+
+    async function addTask() {
+        if (customTaskDate) {
+            taskDate = customTaskDate;
+        }
+        if (customTaskTime) {
+            taskTime = customTaskTime;
+        }
+        try {
+            const newTask = await addDoc(doc(db, "users", auth.currentUser.uid, "tasks"), {
+                taskName: taskName,
+                taskTime: taskTime,
+                taskDate: Timestamp.fromDate(taskDate),
+                sometime: sometime,
+            });
+            console.log("New task added with ID ", newTask.id)
+        } catch (e) {
+            console.error("Error adding document: ", e);
+        }
+    }
+
 </script>
 
 <button id="magicButton" on:click={magicButtonClick} class={magicButtonClicked ? 'clicked' : ''}>
@@ -75,14 +118,14 @@
 </button>
 <div id="magicPrompt" class={magicPromptShown ? '' : 'inactive'}>
     <div id="magicPromptSelector"></div>
-    <input type="text" name="magicPromptInput" id="magicPromptInput" placeholder={magicPromptPlaceholder}>
+    <input type="text" name="magicPromptInput" id="magicPromptInput" placeholder={magicPromptPlaceholder} bind:value={taskName}>
     <div id="magicOptions">
-        <button id="dateOption" on:click={() => {setAllToFalseWithToggle(dateSelectShown, allSelectToggles); dateSelectShown = !dateSelectShown}} class="magicOption">
+        <button id="dateOption" on:click={() => {hideAllSelects(dateSelectShown, allSelectToggles); dateSelectShown = !dateSelectShown}} class="magicOption">
             <i class="fa-regular fa-calendar"></i>
             <p>{dateOptionText}</p>
             <i class={dateSelectShown ? 'fa-solid fa-angle-right rotate' : 'fa-solid fa-angle-right'}></i>
         </button>
-        <button id="timeOption" on:click="{() => {setAllToFalseWithToggle(timeSelectShown, allSelectToggles); timeSelectShown = !timeSelectShown}}" class="magicOption">
+        <button id="timeOption" on:click="{() => {hideAllSelects(timeSelectShown, allSelectToggles); timeSelectShown = !timeSelectShown}}" class="magicOption">
             <i class="fa-regular fa-clock"></i>
             <p>{timeOptionText}</p>
             <i class={timeSelectShown ? 'fa-solid fa-angle-right rotate' : 'fa-solid fa-angle-right'}></i>
@@ -102,16 +145,19 @@
         </button>
     </div>
     <div id="dateSelect" class={dateSelectShown ? 'magicSelect' : 'magicSelect inactive'} >
-        {#each datePresets as datePreset (datePreset.name)}
-            <button class={datePreset.active ? "magicSelectOption active" : "magicSelectOption"} on:click="{() => {setActiveToFalseWithToggle(datePreset.active, datePresets); datePreset.active = !datePreset.active}}">{datePreset.name}</button>
+        {#each dateOptions as dateOption (dateOption.id)}
+            <button class="magicSelectOption" class:active={dateOption.active} on:click="{() => {magicSelectOptionClick(dateOption, dateOptions, "date"); console.log(dateOption.active)}}">{dateOption.active}</button>
         {/each}
-        <input type="date" name="customDateSelect" id="customDateSelect" class="customSelect">
+        <input type="date" bind:value={customTaskDate} name="customDateSelect" id="customDateSelect" class="customSelect">
     </div>
     <div id="timeSelect" class={timeSelectShown ? 'magicSelect' : 'magicSelect inactive'} >
-        {#each timePresets as timePreset (timePreset.name)}
-            <button class={timePreset.active ? "magicSelectOption active" : "magicSelectOption"}>{timePreset.name}</button>
+        {#each timeOptions as timeOption (timeOption.name)}
+            <button class={timeOption.active ? "magicSelectOption active" : "magicSelectOption"}>{timeOption.name}</button>
         {/each}
-        <input type="time" name="customTimeSelect" id="customTimeSelect" class="customSelect">
+        <input type="time" bind:value={customTaskTime} name="customTimeSelect" id="customTimeSelect" class="customSelect">
+    </div>
+    <div id="reminderSelect" class={reminderSelectShown ? 'magicSelect' : 'magicSelect inactive'} >
+
     </div>
 </div>
 
@@ -226,11 +272,13 @@
         margin: 0;
         border-radius: 100px;
         background-color: #f0f0f0;
+        transition: all 0.25s ease;
     }
 
     .magicSelectOption.active {
         background-color: var(--accentColor);
         color: white;
+        transition: all 0.25s ease;
     }
     
     .customSelect {
