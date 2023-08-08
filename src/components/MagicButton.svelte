@@ -39,9 +39,9 @@
         {id: 5, name: "No Date", value: null, sometime: false, active: false},
     ]
     let timeOptions = [
-        {name: "In the morning", value: "today", active: false},
-        {name: "In the afternoon", value: "tommorow", active: false},
-        {name: "In the evening", value: "sometime", active: false},
+        {name: "In the morning", value: "09:00", active: false},
+        {name: "In the afternoon", value: "12:00", active: false},
+        {name: "In the evening", value: "18:00", active: false},
         {name: "No Time", value: null, active: false},
     ]
     let reminderOptions = [
@@ -66,30 +66,40 @@
         }
     }
 
+    function reloadOptionLists() {
+        dateOptions = dateOptions.slice();
+        timeOptions = timeOptions.slice();
+    }
+
     function setActiveToFalseWithToggle(toggle, list) {
         if (toggle == false) {
             list.forEach((item) => {
                 if (item.active) item.active = !item.active;
             });
         }
+        reloadOptionLists();
     }
 
-    function magicSelectOptionClick(option, list, type) {
+    function datetimeOptionClick(option, list, type) {
         setActiveToFalseWithToggle(option.active, list);
         option.active = !option.active;
-        console.log(option.active)
-        taskDate = option.value;
-        sometime = option.sometime;
-        if (type == "date") {
-            customTaskDate = null;
-        } else if (type == "time") {
-            customTaskTime = null;
+        if (option.active) {
+            if (type == "date") {
+                taskDate = option.value;
+                sometime = option.sometime;
+                customTaskDate = null;
+            } else if (type == "time") {
+                taskTime = option.value;
+                customTaskTime = null;
+            }
+        } else {
+            taskDate = null;
+            sometime = null;
         }
-        dateOptions = dateOptions.slice();
-        timeOptions = timeOptions.slice();
+        reloadOptionLists();
     }
 
-    let taskName, taskDate, customTaskDate, customTaskTime, sometime; 
+    let taskName, taskDate, taskTime, customTaskDate, customTaskTime, sometime; 
 
     async function addTask() {
         if (customTaskDate) {
@@ -98,11 +108,14 @@
         if (customTaskTime) {
             taskTime = customTaskTime;
         }
+        const [hours, minutes] = taskTime.split(":");
+        const combinedTaskDate = new Date(taskDate);
+        combinedTaskDate.setHours(parseInt(hours));
+        combinedTaskDate.setMinutes(parseInt(minutes));
         try {
             const newTask = await addDoc(doc(db, "users", auth.currentUser.uid, "tasks"), {
                 taskName: taskName,
-                taskTime: taskTime,
-                taskDate: Timestamp.fromDate(taskDate),
+                taskDate: Timestamp.fromDate(combinedTaskDate),
                 sometime: sometime,
             });
             console.log("New task added with ID ", newTask.id)
@@ -146,9 +159,9 @@
     </div>
     <div id="dateSelect" class={dateSelectShown ? 'magicSelect' : 'magicSelect inactive'} >
         {#each dateOptions as dateOption (dateOption.id)}
-            <button class="magicSelectOption" class:active={dateOption.active} on:click="{() => {magicSelectOptionClick(dateOption, dateOptions, "date"); console.log(dateOption.active)}}">{dateOption.active}</button>
+            <button class="magicSelectOption" class:active={dateOption.active} on:click="{() => {datetimeOptionClick(dateOption, dateOptions, "date")}}">{dateOption.name}</button>
         {/each}
-        <input type="date" bind:value={customTaskDate} name="customDateSelect" id="customDateSelect" class="customSelect">
+        <input type="date" bind:value={customTaskDate} class:active={customTaskDate} on:change={() => {console.log("hello"); setActiveToFalseWithToggle(false, dateOptions)}} name="customDateSelect" id="customDateSelect" class="customSelect">
     </div>
     <div id="timeSelect" class={timeSelectShown ? 'magicSelect' : 'magicSelect inactive'} >
         {#each timeOptions as timeOption (timeOption.name)}
@@ -275,7 +288,7 @@
         transition: all 0.25s ease;
     }
 
-    .magicSelectOption.active {
+    .magicSelectOption.active, .customSelect.active {
         background-color: var(--accentColor);
         color: white;
         transition: all 0.25s ease;
