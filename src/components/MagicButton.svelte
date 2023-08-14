@@ -32,17 +32,17 @@
     let currentDayOfWeek = daysOfWeeks[currentDate.getDay()];
 
     let dateOptions = [
-        {id: 1, name: "Today", value: currentDate, active: false},
-        {id: 2, name: "Tommorow", value: (currentDate.getDate() + 1), active: false},
-        {id: 3, name: "Next "+currentDayOfWeek, value: (currentDate.getDate() + 7), active: false},
-        {id: 4, name: "Sometime", value: null, sometime: true, active: false},
-        {id: 5, name: "No Date", value: null, sometime: false, active: false},
+        {id: 1, name: "No Date", value: null, sometime: false, active: false},
+        {id: 2, name: "Sometime", value: null, sometime: true, active: false},
+        {id: 3, name: "Today", value: currentDate, active: false},
+        {id: 4, name: "Tommorow", value: (currentDate.getDate() + 1), active: false},
+        {id: 5, name: "Next "+currentDayOfWeek, value: (currentDate.getDate() + 7), active: false},
     ]
     let timeOptions = [
+        {name: "No Time", value: null, active: false},
         {name: "In the morning", value: "09:00", active: false},
         {name: "In the afternoon", value: "12:00", active: false},
         {name: "In the evening", value: "18:00", active: false},
-        {name: "No Time", value: null, active: false},
     ]
     let reminderOptions = [
         {name: "Every day until task", value: "today", active: false},
@@ -87,6 +87,7 @@
             if (type == "date") {
                 taskDate = option.value;
                 sometime = option.sometime;
+                taskDateDisplay = option.name;
                 customTaskDate = null;
             } else if (type == "time") {
                 taskTime = option.value;
@@ -96,10 +97,26 @@
             taskDate = null;
             sometime = null;
         }
+        if (!taskDate) {
+            taskDateDisplay = "Date";
+        }
         reloadOptionLists();
     }
 
-    let taskName, taskDate, taskTime, customTaskDate, customTaskTime, sometime; 
+    function customDateChange() {
+        setActiveToFalseWithToggle(false, dateOptions);
+        taskDateDisplay = new Date(customTaskDate)
+        taskDateDisplay = taskDateDisplay.toLocaleString("en-US", dateFormatOptions);
+    }
+
+    let taskName, taskDate, taskTime, customTaskDate, customTaskTime, sometime;
+
+    let taskDateDisplay = "Date"
+    let taskTimeDisplay = "Time";
+
+    const dateFormatOptions = { month: 'long', day: 'numeric', ordinal: 'numeric' };
+
+    $: if (!taskDate) dateOptions[0].active = true;
 
     async function addTask() {
         if (customTaskDate) {
@@ -135,12 +152,12 @@
     <div id="magicOptions">
         <button id="dateOption" on:click={() => {hideAllSelects(dateSelectShown, allSelectToggles); dateSelectShown = !dateSelectShown}} class="magicOption">
             <i class="fa-regular fa-calendar"></i>
-            <p>{dateOptionText}</p>
+            <p>{taskDateDisplay}</p>
             <i class={dateSelectShown ? 'fa-solid fa-angle-right rotate' : 'fa-solid fa-angle-right'}></i>
         </button>
-        <button id="timeOption" on:click="{() => {hideAllSelects(timeSelectShown, allSelectToggles); timeSelectShown = !timeSelectShown}}" class="magicOption">
+        <button id="timeOption" on:click={() => {hideAllSelects(timeSelectShown, allSelectToggles); timeSelectShown = !timeSelectShown}} class="magicOption">
             <i class="fa-regular fa-clock"></i>
-            <p>{timeOptionText}</p>
+            <p>{taskTimeDisplay}</p>
             <i class={timeSelectShown ? 'fa-solid fa-angle-right rotate' : 'fa-solid fa-angle-right'}></i>
         </button>
         <button class="magicOption" id="reminderOption">
@@ -159,9 +176,9 @@
     </div>
     <div id="dateSelect" class={dateSelectShown ? 'magicSelect' : 'magicSelect inactive'} >
         {#each dateOptions as dateOption (dateOption.id)}
-            <button class="magicSelectOption" class:active={dateOption.active} on:click="{() => {datetimeOptionClick(dateOption, dateOptions, "date")}}">{dateOption.name}</button>
+            <button class="magicSelectOption" class:active={dateOption.active} on:click={() => {datetimeOptionClick(dateOption, dateOptions, "date")}}>{dateOption.name}</button>
         {/each}
-        <input type="date" bind:value={customTaskDate} class:active={customTaskDate} on:change={() => {console.log("hello"); setActiveToFalseWithToggle(false, dateOptions)}} name="customDateSelect" id="customDateSelect" class="customSelect">
+        <input type="date" bind:value={customTaskDate} class:active={customTaskDate} on:change={() => {customDateChange()}} name="customDateSelect" id="customDateSelect" class="customSelect">
     </div>
     <div id="timeSelect" class={timeSelectShown ? 'magicSelect' : 'magicSelect inactive'} >
         {#each timeOptions as timeOption (timeOption.name)}
