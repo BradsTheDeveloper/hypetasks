@@ -109,11 +109,26 @@
         setActiveToFalseWithToggle(false, dateOptions);
         taskDateDisplay = new Date(customTaskDate)
         taskDateDisplay = taskDateDisplay.toLocaleString("en-US", dateFormatOptions);
+        if (!customTaskDate) {
+            dateOptions[0].active = true; 
+            taskDateDisplay = "Date";
+        }
+        dateOptions.forEach((item) => {
+            const optionDate = new Date();
+            optionDate.setDate(item.value);
+            const customDate = new Date(customTaskDate);
+            if (optionDate.toDateString() == customDate.toDateString()) {
+                item.active = true;
+                taskDateDisplay = item.name;
+                customTaskDate = null;
+            };
+        });
+        // TODO: Fix the commented code above
     }
 
     let taskName, taskDate, taskTime, customTaskDate, customTaskTime, sometime;
 
-    let taskDateDisplay = "Date"
+    let taskDateDisplay = "Date";
     let taskTimeDisplay = "Time";
 
     $: if (!taskDate && sometime != true) dateOptions[0].active = true;
