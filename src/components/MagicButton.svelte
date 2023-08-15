@@ -97,11 +97,13 @@
             taskDate = null;
             sometime = null;
         }
-        if (!taskDate) {
+        if (!taskDate && option.sometime == false) {
             taskDateDisplay = "Date";
         }
         reloadOptionLists();
     }
+
+    const dateFormatOptions = { month: 'long', day: 'numeric', ordinal: 'numeric' };
 
     function customDateChange() {
         setActiveToFalseWithToggle(false, dateOptions);
@@ -114,9 +116,7 @@
     let taskDateDisplay = "Date"
     let taskTimeDisplay = "Time";
 
-    const dateFormatOptions = { month: 'long', day: 'numeric', ordinal: 'numeric' };
-
-    $: if (!taskDate) dateOptions[0].active = true;
+    $: if (!taskDate && sometime != true) dateOptions[0].active = true;
 
     async function addTask() {
         if (customTaskDate) {
@@ -178,7 +178,7 @@
         {#each dateOptions as dateOption (dateOption.id)}
             <button class="magicSelectOption" class:active={dateOption.active} on:click={() => {datetimeOptionClick(dateOption, dateOptions, "date")}}>{dateOption.name}</button>
         {/each}
-        <input type="date" bind:value={customTaskDate} class:active={customTaskDate} on:change={() => {customDateChange()}} name="customDateSelect" id="customDateSelect" class="customSelect">
+        <input type="date" bind:value={customTaskDate} class:active={customTaskDate} on:change={() => {customDateChange()}} min={currentDate.toISOString().split('T')[0]} name="customDateSelect" id="customDateSelect" class="customSelect">
     </div>
     <div id="timeSelect" class={timeSelectShown ? 'magicSelect' : 'magicSelect inactive'} >
         {#each timeOptions as timeOption (timeOption.name)}
