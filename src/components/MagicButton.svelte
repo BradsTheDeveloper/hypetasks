@@ -103,6 +103,11 @@
         reloadOptionLists();
     }
 
+    function isValidDate(date) {
+        return date && Object.prototype.toString.call(date) === "[object Date]" && !isNaN(date);
+    }
+
+
     const dateFormatOptions = { month: 'long', day: 'numeric', ordinal: 'numeric' };
 
     function customDateChange() {
@@ -117,7 +122,9 @@
             const optionDate = new Date();
             optionDate.setDate(item.value);
             const customDate = new Date(customTaskDate);
-            if (optionDate.toDateString() == customDate.toDateString()) {
+            console.log(optionDate.toDateString())
+            console.log(customDate.toDateString())
+            if (optionDate.toDateString() == customDate.toDateString() || !isValidDate(optionDate) && item.name == "Today") {
                 item.active = true;
                 taskDateDisplay = item.name;
                 customTaskDate = null;
