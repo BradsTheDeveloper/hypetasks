@@ -86,6 +86,7 @@
         if (option.active) {
             if (type == "date") {
                 taskDate = option.value;
+                //if (!isValidDate(optionDate) && item.name == "Today") {}
                 sometime = option.sometime;
                 taskDateDisplay = option.name;
                 customTaskDate = null;
@@ -104,7 +105,20 @@
     }
 
     function isValidDate(date) {
-        return date && Object.prototype.toString.call(date) === "[object Date]" && !isNaN(date);
+        // return date && Object.prototype.toString.call(date) === "[object Date]" && !isNaN(date);
+        if (Object.prototype.toString.call(date) === "[object Date]") {
+        // it is a date
+            if (isNaN(date)) { // d.getTime() or d.valueOf() will also work
+                // date object is not valid
+                return false
+            } else {
+                // date object is valid
+                return true
+            }
+        } else {
+        // not a date object
+            return false
+        }
     }
 
 
@@ -124,13 +138,13 @@
             const customDate = new Date(customTaskDate);
             console.log(optionDate.toDateString())
             console.log(customDate.toDateString())
-            if (optionDate.toDateString() == customDate.toDateString() || !isValidDate(optionDate) && item.name == "Today") {
+            console.log(currentDate.toDateString())
+            if (optionDate.toDateString() == customDate.toDateString() || isNaN(optionDate) && currentDate.toDateString() == customDate.toDateString()) {
                 item.active = true;
                 taskDateDisplay = item.name;
                 customTaskDate = null;
             };
         });
-        // TODO: Fix the commented code above
     }
 
     let taskName, taskDate, taskTime, customTaskDate, customTaskTime, sometime;
