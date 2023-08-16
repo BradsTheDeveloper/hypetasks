@@ -1,6 +1,7 @@
 <script>
     import { auth, db } from "../initialiseFirebase.js";
     import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+    import { browser } from '$app/environment';
     
 	let magicButtonClicked = false
 
@@ -143,7 +144,10 @@
                 item.active = true;
                 taskDateDisplay = item.name;
                 customTaskDate = null;
-            };
+                if (browser) {
+                    document.activeElement.blur()
+                }
+            }
         });
     }
 
