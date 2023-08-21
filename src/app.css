@@ -25,16 +25,16 @@ h1 {
     font-weight: bolder;
 }
 
-html {
-    overflow: hidden;
-}
-
 html, body {
     margin: 0;
     padding: 0;
     font-size: 16px;
     background-color: var(--background) !important;
     color: var(--textColor) !important; 
+}
+
+html {
+    overflow: hidden;
 }
 
 body {
