@@ -1,6 +1,7 @@
 <script>
     import { auth, db } from "../initialiseFirebase.js";
-    import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+    import { onMount } from 'svelte';
+    import { addDoc, collection, doc, setDoc, getDocs, query, where, onSnapshot, orderBy } from "firebase/firestore";
     import { browser } from '$app/environment';
     
 	let magicButtonClicked = false
@@ -48,6 +49,34 @@
     let reminderOptions = [
         {name: "Every day until task", value: "today", active: false},
     ]
+
+    let defaultTimePresets = [];
+    let customTimePresets = [];
+
+    onMount(async () => {
+        const unsubscribeToDefaultTimePresets = onSnapshot(query(collection(db, "users", "default", "timePresets")), (querySnapshot) => {
+            defaultTimePresets = [];
+            querySnapshot.forEach((doc) => {
+                let timePreset = doc.data();
+                console.log(doc.data())
+                if (timePreset.default) {
+                    timePreset.active = false;
+                    defaultTimePresets.push(timePreset);
+                }
+            });
+        });
+        const unsubscribeToCustomTimePresets = onSnapshot(query(collection(db, "users", "default", "timePresets")), (querySnapshot) => {
+            customTimePresets = [];
+            querySnapshot.forEach((doc) => {
+                let timePreset = doc.data();
+                console.log(doc.data())
+                if (!timePreset.default) {
+                    timePreset.active = false;
+                    customTimePresets.push(timePreset);
+                }
+            });
+        });
+    });
 
     function hideAllSelects(toggle) {
         //let toggles = [dateSelectShown, timeSelectShown, reminderSelectShown, areaSelectShown]
@@ -179,6 +208,8 @@
         } catch (e) {
             console.error("Error adding document: ", e);
         }
+        unsubscribeToDefaultTimePresets()
+        unsubscribeToCustomTimePresets()
     }
 
 </script>
@@ -221,10 +252,17 @@
         <input type="date" bind:value={customTaskDate} class:active={customTaskDate} on:change={() => {customDateChange()}} min={currentDate.toISOString().split('T')[0]} name="customDateSelect" id="customDateSelect" class="customSelect">
     </div>
     <div id="timeSelect" class={timeSelectShown ? 'magicSelect' : 'magicSelect inactive'} >
-        {#each timeOptions as timeOption (timeOption.name)}
+        {#each defaultTimePresets as timeOption}
+            <button class={timeOption.active ? "magicSelectOption active" : "magicSelectOption"}>{timeOption.name}</button>
+        {/each}
+        {#each customTimePresets as timeOption}
             <button class={timeOption.active ? "magicSelectOption active" : "magicSelectOption"}>{timeOption.name}</button>
         {/each}
         <input type="time" bind:value={customTaskTime} name="customTimeSelect" id="customTimeSelect" class="customSelect">
+        <button id="changeTimePresetsButton" class="magicSelectOption">
+            Change Presets
+            <i class="fa-solid fa-gear"></i>
+        </button>
     </div>
     <div id="reminderSelect" class={reminderSelectShown ? 'magicSelect' : 'magicSelect inactive'} >
 
@@ -333,6 +371,7 @@
         width: 100%;
         gap: 0.25rem;
         transition: all 0.5s ease;
+        overflow: hidden;
     }
 
     .magicSelectOption, .customSelect {
@@ -343,6 +382,11 @@
         border-radius: 100px;
         background-color: #f0f0f0;
         transition: all 0.25s ease;
+    }
+
+    .magicSelectOption {
+        /*display: flex;
+        align-items: center;*/
     }
 
     .magicSelectOption.active, .customSelect.active {
@@ -359,6 +403,11 @@
         visibility: hidden;
         opacity: 0;
         transition: all 0.25s ease;
+    }
+
+    #changeTimePresetsButton {
+        background-color: rgba(255, 255, 255, 0.9);
+        color: #007AFF;
     }
 
     @keyframes popClick {
